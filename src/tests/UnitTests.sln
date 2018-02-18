@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Huanlin", "Test.Huanlin\Test.Huanlin.csproj", "{FFE0B43B-CE54-4574-889A-B04808DAE0FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02B3F701-E432-4685-827C-9C025CDAB976}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		UnitTests.vsmdi = UnitTests.vsmdi
+		UnitTests1.vsmdi = UnitTests1.vsmdi
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Huanlin.Braille", "Test.Huanlin.Braille\Test.Huanlin.Braille.csproj", "{A67E0D18-8A3D-4A47-9A34-17A280EF7508}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Huanlin.TextServices", "Test.Huanlin.TextServices\Test.Huanlin.TextServices.csproj", "{4EB2EB05-2D47-44FC-8A00-A5F6A8786B7B}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = UnitTests1.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFE0B43B-CE54-4574-889A-B04808DAE0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFE0B43B-CE54-4574-889A-B04808DAE0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFE0B43B-CE54-4574-889A-B04808DAE0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFE0B43B-CE54-4574-889A-B04808DAE0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EB2EB05-2D47-44FC-8A00-A5F6A8786B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EB2EB05-2D47-44FC-8A00-A5F6A8786B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EB2EB05-2D47-44FC-8A00-A5F6A8786B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB2EB05-2D47-44FC-8A00-A5F6A8786B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
