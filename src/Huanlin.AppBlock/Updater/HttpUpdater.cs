@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Cache;
 using System.Text;
 using System.Threading.Tasks;
 using Serilog;
@@ -224,7 +225,8 @@ namespace Huanlin.AppBlock.Updater
 			{
 				// 取得 Update.txt 的內容
 				myWebClient.Encoding = Encoding.UTF8;
-				string contents = await myWebClient.DownloadStringTaskAsync(m_ServerUri + UpdateFileName);
+                myWebClient.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore); // Do NOT use cache!
+                string contents = await myWebClient.DownloadStringTaskAsync(m_ServerUri + UpdateFileName);
 
 				// Strip the "LF" from CR+LF and break it down by line
 				contents = contents.Replace("\n", "");
@@ -428,10 +430,7 @@ namespace Huanlin.AppBlock.Updater
 
 							// 1.下載檔案並存成暫時檔名
 							await myWebClient.DownloadFileTaskAsync(new Uri(serverFileUrl), tempFileName);
-							//while (myWebClient.IsBusy)
-							//{
-							//	Application.DoEvents();	// 讓主執行緒能夠繼續處理更新 UI 的動作
-							//}
+
 							if (!FileExistsAndNotEmpty(tempFileName))	// 檢查檔案下載是否成功
 							{
 								throw new Exception(ErrorDownloadingFile + item.FileName);
