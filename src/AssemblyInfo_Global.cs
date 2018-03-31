@@ -8,7 +8,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HuanlinSoft")]
 [assembly: AssemblyProduct("HuanlinLib")]
-[assembly: AssemblyCopyright("Copyright(c) Huan-Lin Tsai 2008-2015")]
+[assembly: AssemblyCopyright("Copyright(c) Huan-Lin Tsai 2008-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,4 +19,4 @@ using System.Reflection;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("4.0.0.*")]
+[assembly: AssemblyVersion("4.0.1.*")]
