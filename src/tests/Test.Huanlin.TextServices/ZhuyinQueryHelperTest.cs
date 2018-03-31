@@ -2,8 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Test.Huanlin.TextServices
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for ZhuyinQueryHelperTest and is intended
     ///to contain all ZhuyinQueryHelperTest Unit Tests
@@ -90,12 +90,12 @@ namespace Test.Huanlin.TextServices
             string aChar = "料";
             string[] expected = { "ㄌㄧㄠˋ" };
             string[] actual;
-            actual = ZhuyinQueryHelper.GetZhuyinSymbols(aChar);
+            actual = ZhuyinQueryHelper.GetZhuyinSymbols(aChar, false);
             CollectionAssert.AreEqual(expected, actual);
 
             aChar = "們";
             expected = new string[] { "ㄇㄣˊ", "ㄇㄣ˙" };
-            actual = ZhuyinQueryHelper.GetZhuyinSymbols(aChar);
+            actual = ZhuyinQueryHelper.GetZhuyinSymbols(aChar, false);
             CollectionAssert.AreEqual(expected, actual);
         }
 

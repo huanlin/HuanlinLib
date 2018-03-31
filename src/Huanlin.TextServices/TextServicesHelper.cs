@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-using System.Security;
-using System.Security.Permissions;
 using Huanlin.WinApi.TextServices;
 
 namespace Huanlin.TextServices

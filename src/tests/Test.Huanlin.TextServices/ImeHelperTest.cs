@@ -1,9 +1,10 @@
 ﻿using Huanlin.TextServices;
+using Huanlin.TextServices.Chinese;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Test.Huanlin.TextServices
 {
-    
-    
+
+
     /// <summary>
     ///This is a test class for ImeHelperTest and is intended
     ///to contain all ImeHelperTest Unit Tests
@@ -72,6 +73,13 @@ namespace Test.Huanlin.TextServices
             string[] actual;
             actual = ImeHelper.GetBopomofo(aChineseText);            
             CollectionAssert.AreEqual(expected, actual);
+
+            aChineseText = "天龍八部";
+            // 注意: ㄊㄧㄢ後面接著的不是全形空白，而是一聲的符號 (0x02c9)。用 Visual Studio 的 watch 視窗可以看得出來。
+            expected = new string[] { "ㄊㄧㄢˉ", "ㄌㄨㄥˊ", "ㄅ　ㄚˉ", "ㄅㄨ　ˋ"};
+            actual = ImeHelper.GetBopomofo(aChineseText);
+            CollectionAssert.AreEqual(expected, actual);
+
 
             // 測試一串中文字中夾雜非中文字的結果。
             aChineseText = "我是 M，我35歲";
