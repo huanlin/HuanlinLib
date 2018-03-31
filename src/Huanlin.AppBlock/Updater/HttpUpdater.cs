@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.ComponentModel;
+using System.Text;
+using System.Threading.Tasks;
+using Serilog;
 
 namespace Huanlin.AppBlock.Updater
-{	
-	/*
+{
+    /*
 	    此類別可利用 HTTP 協定檢查以及下載應用程式的更新檔案。若其中有一個檔案下載失敗，就會整批 rollback（把先前下載的檔案刪除）。
 	    改寫自 Eduardo Oliveira 的 AutoUpdate.vb，並增加下載進度的事件。
 	
@@ -23,11 +24,11 @@ namespace Huanlin.AppBlock.Updater
 
         方法：
 
-          - RetrieveUpdateList() : 取得可更新的檔案清單。此函式不僅會從伺服器端取得更新清單及剖析其內容，還會檢查本地端的檔案是否需要更新或刪除。
+          - RetrieveUpdateListAsync() : 取得可更新的檔案清單。此函式不僅會從伺服器端取得更新清單及剖析其內容，還會檢查本地端的檔案是否需要更新或刪除。
 
           - HasUpdates() : 傳回 True/False，代表伺服器端是否有新版本。
 
-          - Update() : 下載並更新。
+          - UpdateAsync() : 下載並更新。
 
         與進度有關的事件：
 
@@ -78,9 +79,11 @@ namespace Huanlin.AppBlock.Updater
 		private event FileUpdateEventHandler m_FileUpdatedEvent;
 		private event DownloadProgressChangedEventHandler m_DownloadProgressChangedEvent;
 		
+        internal ILogger Logger { get; private set; }
 
-		public HttpUpdater()
+		public HttpUpdater(ILogger logger)
 		{
+            Logger = logger ?? throw new ArgumentNullException("logger");
 			m_ClientPath = "";
 			m_ChangeLogFileName = "";
 
@@ -206,10 +209,14 @@ namespace Huanlin.AppBlock.Updater
 		/// 還會檢查本地端的檔案是否需要更新或刪除。處理的結果是儲存在
 		/// m_UpdateItems 屬性中。
 		/// </summary>
-		public void RetrieveUpdateList()
+		public async Task GetUpdateListAsync()
 		{
-			CheckClientPath();
+            Logger.Debug("開始獲取更新檔案清單。");
+
+            CheckClientPath();
 			CheckServerUrl();
+
+            CleanUp();
 
 			WebClient myWebClient = new WebClient();
 			
@@ -217,7 +224,7 @@ namespace Huanlin.AppBlock.Updater
 			{
 				// 取得 Update.txt 的內容
 				myWebClient.Encoding = Encoding.UTF8;
-				string contents = myWebClient.DownloadString(m_ServerUri + UpdateFileName);
+				string contents = await myWebClient.DownloadStringTaskAsync(m_ServerUri + UpdateFileName);
 
 				// Strip the "LF" from CR+LF and break it down by line
 				contents = contents.Replace("\n", "");
@@ -348,12 +355,14 @@ namespace Huanlin.AppBlock.Updater
 					if (item.Operation != UpdateAction.None)
 					{
 						m_UpdateItems.Add(item);
+                        Logger.Debug("找到需要更新的檔案： {@Item}", item);
 					}
 				}
-			}
+                Logger.Debug($"完成獲取更新檔案清單，共 {m_UpdateItems.Count} 個更新項目。");
+            }
 			finally
 			{
-				myWebClient.Dispose();
+				myWebClient.Dispose();                
 			}		
 		}
 
@@ -366,14 +375,16 @@ namespace Huanlin.AppBlock.Updater
 		/// 執行線上更新。
 		/// </summary>
 		/// <returns>已更新的檔案數量（包含刪除的檔案）。/// </returns>
-		public int Update() 
+		public async Task<int> UpdateAsync() 
 		{
 			if (!HasUpdates())
 			{
 				return 0;
 			}
 
-			CleanUp();
+            Logger.Debug("開始更新檔案。");
+
+            CleanUp();            
 
 			// 加入預設的變更記錄檔名.
 			if (!String.IsNullOrEmpty(m_ChangeLogFileName)) 
@@ -413,16 +424,18 @@ namespace Huanlin.AppBlock.Updater
 				    switch (item.Operation)
 					{
 						case UpdateAction.Overwrite:
+                            Logger.Debug($"正在下載檔案，來源: {serverFileUrl}，目的： {tempFileName}");
+
 							// 1.下載檔案並存成暫時檔名
-							myWebClient.DownloadFileAsync(new Uri(serverFileUrl), tempFileName);
-							while (myWebClient.IsBusy)
-							{
-								Application.DoEvents();	// 讓主執行緒能夠繼續處理更新 UI 的動作
-							}
+							await myWebClient.DownloadFileTaskAsync(new Uri(serverFileUrl), tempFileName);
+							//while (myWebClient.IsBusy)
+							//{
+							//	Application.DoEvents();	// 讓主執行緒能夠繼續處理更新 UI 的動作
+							//}
 							if (!FileExistsAndNotEmpty(tempFileName))	// 檢查檔案下載是否成功
 							{
 								throw new Exception(ErrorDownloadingFile + item.FileName);
-								// note: 錯誤訊息中不要顯示完整檔案路徑，以免被看出下載路徑，使用者就能自行下載檔案了。
+								// note: 錯誤訊息中不要顯示完整檔案路徑，以免使用者看到完整的下載路徑。
 							}
 
 							// 2.將欲覆蓋的原有檔案更名為待刪除檔案
@@ -488,6 +501,7 @@ namespace Huanlin.AppBlock.Updater
 						}
 					}
 				}
+                Logger.Error(ex, "更新檔案時發生錯誤!");
 				throw ex;
 			}
 			finally
@@ -629,8 +643,8 @@ namespace Huanlin.AppBlock.Updater
 	/// </summary>
 	public class UpdateItem
 	{
-		public string FileName = null;
-		public UpdateAction Operation;
+		public string FileName { get; set; } = null;
+		public UpdateAction Operation { get; set; }
 
 		public UpdateItem()
 		{
