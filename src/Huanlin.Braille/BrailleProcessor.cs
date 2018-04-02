@@ -2,20 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Diagnostics;
-using Huanlin.Helpers;
 using Huanlin.Braille.Converters;
 using Huanlin.Braille.Data;
-using Huanlin.Braille;
+using Huanlin.Helpers;
 
 namespace Huanlin.Braille
 {
-	public struct CharPosition
+    public struct CharPosition
 	{
 		public char CharValue;		// 字元
 		public int LineNumber;		// 第幾列
