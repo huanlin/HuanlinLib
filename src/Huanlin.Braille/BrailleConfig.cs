@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 using System.Reflection;
-using System.IO;
-using Nini.Config;
 using Huanlin.Helpers;
+using SharpConfig;
 
 namespace Huanlin.Braille
 {
@@ -14,11 +11,15 @@ namespace Huanlin.Braille
     public class BrailleConfig
     {
         private static bool m_Activated = false;
-        private static IConfigSource m_CfgSrc = null;
-        private static IConfig m_ConversionCfg = null;
+        private static Configuration m_Config = null;
+        private static string m_ConfigFileName = null;
+
+        private const string ConfigFileName = "Braille.ini";
+        private const string ConversionSectionName = "Conversion";
 
         private BrailleConfig()
         {
+
         }
 
         static BrailleConfig()
@@ -26,13 +27,12 @@ namespace Huanlin.Braille
             Assembly asmb = Assembly.GetEntryAssembly();
             if (asmb != null)
             {
-                string fname = StrHelper.ExtractFilePath(asmb.Location) + "Braille.ini";
-                if (File.Exists(fname))
+                m_ConfigFileName = StrHelper.ExtractFilePath(asmb.Location) + ConfigFileName;
+                if (File.Exists(m_ConfigFileName))
                 {
                     try
                     {
-                        m_CfgSrc = new IniConfigSource(fname);
-                        m_ConversionCfg = m_CfgSrc.Configs["Conversion"];
+                        m_Config = Configuration.LoadFromFile(m_ConfigFileName);
                         m_Activated = true;
                     }
                     catch
@@ -48,7 +48,7 @@ namespace Huanlin.Braille
             if (!m_Activated)
                 return;
 
-            m_CfgSrc.Save();
+            m_Config.SaveToFile(m_ConfigFileName);
         }
 
         public static bool Activated
@@ -63,8 +63,14 @@ namespace Huanlin.Braille
 		/// </summary>
 		public static bool AutoIndentNumberedLine
         {
-			get { return m_ConversionCfg.GetBoolean("AutoIndentNumberedLine", false); }
-			set { m_ConversionCfg.Set("AutoIndentNumberedLine", value); }
+			get
+            {
+                return m_Config[ConversionSectionName]["AutoIndentNumberedLine"].BoolValue;
+            }
+			set
+            {
+                m_Config[ConversionSectionName]["AutoIndentNumberedLine"].BoolValue = value;
+            }
         }
 
         #endregion
