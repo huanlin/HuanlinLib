@@ -243,10 +243,6 @@
     <EmbeddedResource Include="Data\PhoneticBrailleTable.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\nchinese\src\NChinese\NChinese.csproj">
-      <Project>{087CFE35-5735-4738-9F21-D9279627D89C}</Project>
-      <Name>NChinese</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Huanlin\Huanlin.csproj">
       <Project>{4C2793DC-4827-4DC4-AF4C-F966D8290077}</Project>
       <Name>Huanlin</Name>
@@ -270,8 +266,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="NChinese">
+      <Version>0.3.3</Version>
+    </PackageReference>
+    <PackageReference Include="Serilog">
+      <Version>2.7.1-dev-00972</Version>
+    </PackageReference>
     <PackageReference Include="sharpconfig">
-      <Version>3.2.6.1</Version>
+      <Version>3.2.8</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

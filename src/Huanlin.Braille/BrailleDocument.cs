@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Huanlin.Helpers;
 using NChinese.Phonetic;
+using Serilog;
 
 namespace Huanlin.Braille
 {
@@ -132,11 +133,13 @@ namespace Huanlin.Braille
 
         public void LoadAndConvert(TextReader reader)
         {
+            Log.Debug("BrailleDocument.LoadAndConvert() 開始執行。");
+
             int lineNumber = 0;
 
             string line;
 
-            this.Clear();
+            Clear();
 
             m_Processor.InitializeForConvertion();
 
@@ -152,6 +155,8 @@ namespace Huanlin.Braille
             m_Processor.FormatDocument(this);   // 斷行
 
             FetchPageTitles();      // 提取標題列
+
+            Log.Debug("BrailleDocument.LoadAndConvert() 執行完畢。");
         }
 
         /// <summary>
