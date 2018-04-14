@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Huanlin.Braille.Converters;
 using Huanlin.Braille.Data;
 using Huanlin.Helpers;
+using NChinese.Phonetic;
 
 namespace Huanlin.Braille
 {
@@ -126,15 +127,15 @@ namespace Huanlin.Braille
 
         static BrailleProcessor()
         {
-            s_DashesForOrgPageNumber = BrailleProcessor.GetDashForOrgPageNumber();
+            s_DashesForOrgPageNumber = GetDashForOrgPageNumber();
         }
 
-        private BrailleProcessor()
+        private BrailleProcessor(ZhuyinReverseConverter zhuyinConverter)
 		{
             m_Converters = new List<WordConverter>();
 
             m_ContextTagConverter = new ContextTagConverter();
-            m_ChineseConverter = new ChineseWordConverter();
+            m_ChineseConverter = new ChineseWordConverter(zhuyinConverter);
             m_EnglishConverter = new EnglishWordConverter();
             m_MathConverter = new MathConverter();
             m_CoordConverter = new CoordinateConverter();
@@ -162,14 +163,14 @@ namespace Huanlin.Braille
 		/// Get singleton instance.
 		/// </summary>
 		/// <returns></returns>
-		public static BrailleProcessor GetInstance()
+		public static BrailleProcessor GetInstance(ZhuyinReverseConverter zhuyinConverter = null)
 		{
 			if (s_Processor != null)
 			{
 				return s_Processor;
 			}
 
-			s_Processor = new BrailleProcessor();
+			s_Processor = new BrailleProcessor(zhuyinConverter);
 			return s_Processor;
 		}
 

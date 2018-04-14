@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Huanlin.Braille.Data;
 using Huanlin.Helpers;
-using Huanlin.TextServices;
-using Huanlin.TextServices.Chinese;
+using NChinese;
+using NChinese.Phonetic;
 
 namespace Huanlin.Braille.Converters
 {
@@ -13,12 +13,15 @@ namespace Huanlin.Braille.Converters
     /// </summary>
     public sealed class ChineseWordConverter : WordConverter
     {
-        private ChineseBrailleTable m_Table;
+        private ChineseBrailleTable _brailleTable;
 
-        public ChineseWordConverter()
+        public ZhuyinReverseConverter ZhuyinConverter { get; set; }
+
+        public ChineseWordConverter(ZhuyinReverseConverter zhuyinConverter)
             : base()
         {
-            m_Table = ChineseBrailleTable.GetInstance();
+            _brailleTable = ChineseBrailleTable.GetInstance();
+            ZhuyinConverter = zhuyinConverter ?? throw new ArgumentNullException(nameof(zhuyinConverter));
         }
 
         /// <summary>
@@ -74,7 +77,7 @@ namespace Huanlin.Braille.Converters
                 text = ch.ToString();
 
                 // 處理雙字元的標點符號。
-                if (ch == '…' || ch == '－' || ch == '─' || ch == '╴' || ch == '﹏') 
+                if (ch == '…' || ch == '－' || ch == '─' || ch == '╴' || ch == '﹏')
                 {
                     // 讀下一個字元，若是相同符號，則可略過；若不同，則下次迴圈仍需處理。
                     if (charStack.Count >= 2)
@@ -166,7 +169,7 @@ namespace Huanlin.Braille.Converters
                 brWordList.Add(brWord);
 
                 // 記錄連續中文字元，以修正破音字的注音字根。
-                if (Huanlin.Helpers.UnicodeHelper.IsCJK(brWord.Text))   // 如果是中文字元，要記錄連續的中文字元區間
+                if (brWord.Text.IsCJK())   // 如果是中文字元，要記錄連續的中文字元區間
                 {
                     if (chineseStartIdx < 0)
                     {
@@ -209,8 +212,6 @@ namespace Huanlin.Braille.Converters
                 return;
             if ((endIdx - startIdx + 1) < 2)    // 連續的中文字數若未達兩個字以上，就不處理
                 return;
-            if (!ImeHelper.IFELanguageReady)	// 若 IFELanguage 無法使用，也不處理.
-                return;
 
             // 連續的中文字元個數大於 1，使用新注音取得中文片語的注音字根，以修正破音字的字根。
 
@@ -223,7 +224,7 @@ namespace Huanlin.Braille.Converters
             }
 
             // 取得所有中文字的注音字根。
-            string[] allPhCodes = ImeHelper.GetBopomofoWithPhraseTable(sb.ToString()); // 98.6.11 原：.GetPhoneticCode(sb.ToString());
+            string[] allPhCodes = ZhuyinConverter.GetBopomofoWithPhraseTable(sb.ToString()); 
             string phCode;
             BrailleWord brWord;
             for (int wordIdx = 0; wordIdx < allPhCodes.Length; wordIdx++)
@@ -244,7 +245,7 @@ namespace Huanlin.Braille.Converters
         }
 
         /// <summary>
-        /// 把一個中文字轉換成點字。
+        /// 把一個字元轉換成點字。
         /// </summary>
         /// <param name="text">一個中文字或標點符號。</param>
         /// <returns>若指定的字串是中文字且轉換成功，則傳回轉換之後的點字物件，否則傳回 null。</returns>
@@ -258,13 +259,13 @@ namespace Huanlin.Braille.Converters
             if (text.Length == 1)
             {
                 char ch = text[0];
-
+                                
                 // 如果輸入的明眼字是注音符號，就直接傳回注音的點字碼。
                 if (Zhuyin.IsBopomofo(ch))
                 {
                     // 注意: 不要指定 brWord.PhoneticCode，因為注音符號本身只是個中文符號，
                     //       它並不是中文字，沒有合法的注音組字字根，因此不可指定注音碼。
-                    brCode = m_Table.FindPhonetic(text);
+                    brCode = _brailleTable.FindPhonetic(text);
                     brWord.AddCell(brCode);
                     return brWord;
                 }
@@ -273,7 +274,7 @@ namespace Huanlin.Braille.Converters
                 {
                     // 注意: 不要指定 brWord.PhoneticCode，因為音調記號本身只是個中文符號，
                     //       它並不是中文字，沒有合法的注音組字字根，因此不可指定注音碼。
-                    brCode = m_Table.FindTone(text);
+                    brCode = _brailleTable.FindTone(text);
                     brWord.AddCell(brCode);
 
                     return brWord;
@@ -283,7 +284,7 @@ namespace Huanlin.Braille.Converters
             // 嘗試取得該字的注音字根，若可成功取得，則將注音字根轉換成點字碼，並傳回 BrailleWord 物件。
             string phcode = null;
 
-            if (Huanlin.Helpers.UnicodeHelper.IsCJK(text))  // 若是漢字
+            if (text.IsCJK())  // 若是漢字
             {
                 /* 2010-01-03: 不取得所有的注音字根，只取得一組預設的字根，且判斷是否為多音字。等到編輯時使用者要更換注音，才取出所有字根。
                     // 取得破音字的所有組字字根，每一組字根長度固定為 4 個字元，不足者以全型空白填補。
@@ -293,22 +294,21 @@ namespace Huanlin.Braille.Converters
                         brWord.SetPhoneticCodes(phCodes);
                         phcode = phCodes[0];    // 指定第一組字根為預設的字根。
                     }
-                */                
+                */
 
-                string[] zhuyinCodes = ImeHelper.GetBopomofo(text);
-                if (zhuyinCodes.Length >= 1)    // 其實傳回的陣列應不可能大於 1，因為這裡都只轉換一個中文字。
+                // 取得注音字根
+                string[] zhuyinCodes = ZhuyinConverter.GetBopomofo(text);
+
+                //if (zhuyinCodes == null || zhuyinCodes.Length == 0)
+                //{
+                //    // 若 IFELanguage 無法轉換，就用內建的注音字根查詢功能。
+                //    zhuyinCodes = ZhuyinQueryHelper.GetZhuyinSymbols(text, true);   // 此方法會傳回一個中文字的所有注音字根。
+                //}
+
+                if (zhuyinCodes.Length >= 1)
                 {
                     phcode = zhuyinCodes[0];
                 }
-                else
-                {
-                    // 若微軟新注音無法轉換，就用內建的注音字根查詢功能。
-                    zhuyinCodes = ZhuyinQueryHelper.GetZhuyinSymbols(text, true);   // 此方法會傳回一個中文字的所有注音字根。
-                    if (zhuyinCodes.Length >= 1)
-                    {
-                        phcode = zhuyinCodes[0];
-                    }
-                }                
 
                 if (!String.IsNullOrEmpty(phcode))
                 {
@@ -331,7 +331,7 @@ namespace Huanlin.Braille.Converters
             // 不是中文字，或者無法取得注音字根.
 
             // 處理標點符號
-            string puncBrCode = m_Table.FindPunctuation(text);
+            string puncBrCode = _brailleTable.FindPunctuation(text);
             if (!String.IsNullOrEmpty(puncBrCode))
             {
                 brWord.AddCell(puncBrCode);
@@ -339,7 +339,7 @@ namespace Huanlin.Braille.Converters
             }
 
             // 其它符號
-            brCode = m_Table.Find(text);
+            brCode = _brailleTable.Find(text);
             if (!String.IsNullOrEmpty(brCode))
             {
                 brWord.AddCell(brCode);
@@ -372,10 +372,10 @@ namespace Huanlin.Braille.Converters
             string tonePhCode = phcode.Substring(3, 1);		// 音調
 
             // 取出注音符號各部份的點字碼。
-            string firstBrCode = m_Table.FindPhonetic(firstPhCode);
-            string secondBrCode = m_Table.FindPhonetic(secondPhCode);
-            string thirdBrCode = m_Table.FindPhonetic(thirdPhCode);
-            string toneBrCode = m_Table.FindTone(tonePhCode);
+            string firstBrCode = _brailleTable.FindPhonetic(firstPhCode);
+            string secondBrCode = _brailleTable.FindPhonetic(secondPhCode);
+            string thirdBrCode = _brailleTable.FindPhonetic(thirdPhCode);
+            string toneBrCode = _brailleTable.FindTone(tonePhCode);
 
             if (firstBrCode == null && secondBrCode == null && thirdBrCode == null)
             {
@@ -387,7 +387,7 @@ namespace Huanlin.Braille.Converters
             // 處理特殊的單音字。
             if (StrHelper.IsEmpty(secondPhCode) && StrHelper.IsEmpty(thirdPhCode))
             {
-                string monoBrCode = m_Table.FindMono(firstPhCode);
+                string monoBrCode = _brailleTable.FindMono(firstPhCode);
                 if (String.IsNullOrEmpty(monoBrCode))
                 {
                     throw new Exception("無效的注音符號: " + phcode);
@@ -395,7 +395,7 @@ namespace Huanlin.Braille.Converters
                 cellList.Add(monoBrCode);
 
                 // 特殊單音字要附加 'ㄦ'
-                string erBrCode = m_Table.FindPhonetic("ㄦ");
+                string erBrCode = _brailleTable.FindPhonetic("ㄦ");
                 if (String.IsNullOrEmpty(erBrCode))
                 {
                     throw new Exception("點字對照表中無此符號: ㄦ");
@@ -409,7 +409,7 @@ namespace Huanlin.Braille.Converters
             }
 
             // 處理結合韻。				
-            string joinedBrCode = m_Table.FindJoined(joinedPhCode);
+            string joinedBrCode = _brailleTable.FindJoined(joinedPhCode);
             if (!String.IsNullOrEmpty(joinedBrCode))	// 是結合韻？
             {
                 cellList.Add(firstBrCode);	// 加入第一個注音符號
@@ -454,7 +454,7 @@ namespace Huanlin.Braille.Converters
         {
             get
             {
-                return m_Table;
+                return _brailleTable;
             }
         }
     }

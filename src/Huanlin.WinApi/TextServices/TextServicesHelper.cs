@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Huanlin.WinApi.TextServices;
 
-namespace Huanlin.TextServices
+namespace Huanlin.WinApi.TextServices
 {
     /// <summary>
     /// Text Services Framework helper class.
     /// Written by Huan-Lin Tsai. (2009-12-13)
     /// </summary>
-    public class TextServicesHelper
+    public static class TextServicesHelper
     {
         public static short[] GetlangIds()
         {
@@ -234,5 +233,48 @@ namespace Huanlin.TextServices
             }
             return false;
         }
+
+        /// <summary>
+        /// 判斷微軟注音輸入法是否已安裝。
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsZhuyinImeInstalled()
+        {
+            short[] langIds = TextServicesHelper.GetlangIds();
+            if (langIds.Length > 0)
+            {
+                string[] inputMethods = TextServicesHelper.GetEnabledInputMethods(langIds[0]);
+                foreach (string ime in inputMethods)
+                {
+                    if (ime.EndsWith(" 注音"))  // 注意前面有多一個空白
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 判斷微軟新注音輸入法是否已安裝。
+        /// </summary>
+        /// <returns></returns>
+        public static bool IzNewZhuyinInstalled()
+        {
+            short[] langIds = TextServicesHelper.GetlangIds();
+            if (langIds.Length > 0)
+            {
+                string[] inputMethods = TextServicesHelper.GetEnabledInputMethods(langIds[0]);
+                foreach (string ime in inputMethods)
+                {
+                    if (ime.EndsWith(" 新注音"))   // 注意前面有多一個空白
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
     }
 }

@@ -243,9 +243,9 @@
     <EmbeddedResource Include="Data\PhoneticBrailleTable.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Huanlin.TextServices\Huanlin.TextServices.csproj">
-      <Project>{71F8CC4C-95AE-4D88-A411-F9505829D992}</Project>
-      <Name>Huanlin.TextServices</Name>
+    <ProjectReference Include="..\..\..\..\..\nchinese\src\NChinese\NChinese.csproj">
+      <Project>{087CFE35-5735-4738-9F21-D9279627D89C}</Project>
+      <Name>NChinese</Name>
     </ProjectReference>
     <ProjectReference Include="..\Huanlin\Huanlin.csproj">
       <Project>{4C2793DC-4827-4DC4-AF4C-F966D8290077}</Project>

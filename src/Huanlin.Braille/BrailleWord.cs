@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Runtime.Serialization;
-using System.Reflection;
-using Huanlin.Helpers;
 using Huanlin.Braille.Data;
+using Huanlin.Helpers;
+using NChinese.Phonetic;
 
 namespace Huanlin.Braille
 {
@@ -447,7 +444,7 @@ namespace Huanlin.Braille
             {
                 if (!String.IsNullOrEmpty(m_PhoneticCode))
                     return true;
-                if (!String.IsNullOrEmpty(m_Text) && Huanlin.TextServices.Chinese.Zhuyin.IsTone(m_Text[0]))
+                if (!String.IsNullOrEmpty(m_Text) && Zhuyin.IsTone(m_Text[0]))
                     return true;
                 if (m_PhoneticCodes != null)
                 {

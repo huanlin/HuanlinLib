@@ -19,4 +19,4 @@ using System.Reflection;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("4.0.2.*")]
+[assembly: AssemblyVersion("4.1.0.*")]

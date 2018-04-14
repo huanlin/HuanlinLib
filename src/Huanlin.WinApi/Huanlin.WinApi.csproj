@@ -179,6 +179,7 @@
     <Compile Include="TextServices\Enumerations.cs" />
     <Compile Include="TextServices\ITfInputProcessorProfiles.cs" />
     <Compile Include="TextServices\Sturctures.cs" />
+    <Compile Include="TextServices\TextServicesHelper.cs" />
     <Compile Include="TextServices\TsfApi.cs" />
     <Compile Include="WinBase.cs" />
   </ItemGroup>

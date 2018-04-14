@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Huanlin.Helpers;
+using NChinese.Phonetic;
 
 namespace Huanlin.Braille
 {
@@ -190,7 +191,7 @@ namespace Huanlin.Braille
                         {
                             if (!String.IsNullOrEmpty(brWord.PhoneticCode))
                             {
-                                brWord.IsPolyphonic = Huanlin.TextServices.Chinese.ZhuyinQueryHelper.IsPolyphonic(brWord.Text);
+                                brWord.IsPolyphonic = ZhuyinQueryHelper.IsPolyphonic(brWord.Text);
                             }
                         }
                     }
