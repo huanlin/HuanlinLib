@@ -224,7 +224,7 @@ namespace Huanlin.Braille.Converters
             }
 
             // 取得所有中文字的注音字根。
-            string[] allPhCodes = ZhuyinConverter.GetBopomofoWithPhraseTable(sb.ToString()); 
+            string[] allPhCodes = ZhuyinConverter.GetZhuyinWithPhraseTable(sb.ToString()); 
             string phCode;
             BrailleWord brWord;
             for (int wordIdx = 0; wordIdx < allPhCodes.Length; wordIdx++)
@@ -297,7 +297,7 @@ namespace Huanlin.Braille.Converters
                 */
 
                 // 取得注音字根
-                string[] zhuyinCodes = ZhuyinConverter.GetBopomofo(text);
+                string[] zhuyinCodes = ZhuyinConverter.GetZhuyin(text);
 
                 //if (zhuyinCodes == null || zhuyinCodes.Length == 0)
                 //{

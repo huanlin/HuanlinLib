@@ -267,7 +267,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NChinese">
-      <Version>0.3.3</Version>
+      <Version>0.3.4</Version>
     </PackageReference>
     <PackageReference Include="Serilog">
       <Version>2.7.1-dev-00972</Version>
