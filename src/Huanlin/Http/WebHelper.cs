@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Web;
 
-namespace Huanlin.Web.Helpers
+namespace Huanlin.Http
 {
     public static class WebHelper
     {

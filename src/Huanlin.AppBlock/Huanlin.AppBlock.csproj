@@ -181,7 +181,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registration\ProductVersionName.cs" />
-    <Compile Include="Updater\HttpUpdater.cs" />
     <Compile Include="Registration\UserRegCrypto.cs" />
     <Compile Include="Registration\UserRegData.cs" />
   </ItemGroup>

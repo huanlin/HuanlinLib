@@ -182,6 +182,7 @@
     <Compile Include="TextServices\TextServicesHelper.cs" />
     <Compile Include="TextServices\TsfApi.cs" />
     <Compile Include="WinBase.cs" />
+    <Compile Include="WinKernel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TextServices\README.txt" />

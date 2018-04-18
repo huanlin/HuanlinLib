@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Serilog;
 
-namespace Huanlin.AppBlock.Updater
+namespace Huanlin.Http
 {
     /*
 	    此類別可利用 HTTP 協定檢查以及下載應用程式的更新檔案。若其中有一個檔案下載失敗，就會整批 rollback（把先前下載的檔案刪除）。

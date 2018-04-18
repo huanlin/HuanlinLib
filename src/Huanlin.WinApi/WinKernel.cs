@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Huanlin.Interop
+namespace Huanlin.WinApi
 {
 
-	public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+    public delegate int HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
 	/// <summary>
 	/// Win32 API。
 	/// </summary>
-	public sealed class WinApi
+	public sealed class WinKernel
 	{
-		private WinApi() { }
+		private WinKernel() { }
 
 		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern IntPtr GetModuleHandle(string lpModuleName);

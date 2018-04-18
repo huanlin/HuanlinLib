@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using Huanlin.Interop;
+using System.Windows.Forms;
+using Huanlin.WinApi;
 
 namespace Huanlin.WinForms
 {
-	public class KeyboardHookEventArgs : EventArgs 
+    public class KeyboardHookEventArgs : EventArgs 
 	{
 		public KeyboardHookEventArgs(int hookCode, int wparam, int lparam, Keys key, bool isPressed)
 		{
@@ -74,8 +71,8 @@ namespace Huanlin.WinForms
 			if (!IsInstalled)
 			{
 				m_KbdHookProc = new HookProc(this.KeyboardHookProc);
-				int threadId = WinApi.GetCurrentThreadId();
-				m_HookHandle = WinApi.SetWindowsHookEx(WinApiConst.WH_KEYBOARD, m_KbdHookProc, IntPtr.Zero, threadId);
+				int threadId = WinKernel.GetCurrentThreadId();
+				m_HookHandle = WinKernel.SetWindowsHookEx(WinApiConst.WH_KEYBOARD, m_KbdHookProc, IntPtr.Zero, threadId);
 				return (m_HookHandle != 0);
 			}
 			return true;
@@ -92,7 +89,7 @@ namespace Huanlin.WinForms
 				throw new Exception("尚未設置鍵盤掛鉤!");
 			}
 
-			bool ok = WinApi.UnhookWindowsHookEx(m_HookHandle);
+			bool ok = WinKernel.UnhookWindowsHookEx(m_HookHandle);
 			if (ok)
 			{
 				m_HookHandle = 0;
@@ -104,7 +101,7 @@ namespace Huanlin.WinForms
 		{
 			if (nCode < 0)
 			{
-				return WinApi.CallNextHookEx(m_HookHandle, nCode, wParam, lParam);
+				return WinKernel.CallNextHookEx(m_HookHandle, nCode, wParam, lParam);
 			}
 
 			// 當按鍵按下及鬆開時都會觸發此函式，故先判斷是按下還是鬆開。
@@ -119,7 +116,7 @@ namespace Huanlin.WinForms
 			{
 				return 1;
 			}
-			return WinApi.CallNextHookEx(m_HookHandle, nCode, wParam, lParam);
+			return WinKernel.CallNextHookEx(m_HookHandle, nCode, wParam, lParam);
 		}
 	}
 
@@ -141,8 +138,8 @@ namespace Huanlin.WinForms
 				{
 					m_KbdHookProc = new HookProc(this.KeyboardHookProc);
 
-					m_HookHandle = WinApi.SetWindowsHookEx(WinApiConst.WH_KEYBOARD_LL, m_KbdHookProc,
-						WinApi.GetModuleHandle(curModule.ModuleName), 0);
+					m_HookHandle = WinKernel.SetWindowsHookEx(WinApiConst.WH_KEYBOARD_LL, m_KbdHookProc,
+						WinKernel.GetModuleHandle(curModule.ModuleName), 0);
 				}
 				return (m_HookHandle != 0);
 			}

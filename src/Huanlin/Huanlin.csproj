@@ -191,6 +191,7 @@
     <Compile Include="Cryptography\HashCrypto.cs" />
     <Compile Include="Cryptography\SymmetricCrypto.cs" />
     <Compile Include="Cryptography\CryptoUtils.cs" />
+    <Compile Include="Data\DbHelper.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\ArrayHelper.cs" />
     <Compile Include="Helpers\Base36.cs" />
@@ -200,7 +201,10 @@
     <Compile Include="Helpers\NetHelper.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\UnicodeHelper.cs" />
-    <Compile Include="Interop\WinApi.cs" />
+    <Compile Include="Http\HttpContentParser.cs" />
+    <Compile Include="Http\HttpMultipartParser.cs" />
+    <Compile Include="Http\HttpUpdater.cs" />
+    <Compile Include="Http\WebHelper.cs" />
     <Compile Include="Sys\FileRunner.cs" />
     <Compile Include="Sys\SysInfo.cs" />
     <Compile Include="Helpers\Base64.cs" />
@@ -231,6 +235,11 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog">
+      <Version>2.7.1-dev-00972</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
