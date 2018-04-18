@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Huanlin.Common</id>
+    <version>$version$</version>
+    <authors>Michael Tsai</authors>
+    <owners>Michael Tsai</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/huanlin/HuanlinLib/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/huanlin/HuanlinLib</projectUrl>
+    <description>Huanlin library for common utilities.</description>
+    <releaseNotes></releaseNotes>
+    <tags>Utility Helper</tags>
+    <copyright>Copyright (c) 2018 Michael Tsai (蔡煥麟)</copyright>
+    <repository url="https://github.com/huanlin/HuanlinLib" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.2">
+        <dependency id="NUnit" version="3.10.1" exclude="Build,Analyzers" />
+        <dependency id="Serilog" version="2.7.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\Huanlin.Common\bin\Debug\Huanlin.Common.dll" target="lib\net452\Huanlin.Common.dll" />
+  </files>
+</package>

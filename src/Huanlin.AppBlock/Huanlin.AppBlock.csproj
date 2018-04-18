@@ -181,12 +181,6 @@
     <Compile Include="Registration\UserRegData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Huanlin\Huanlin.csproj">
-      <Project>{4C2793DC-4827-4DC4-AF4C-F966D8290077}</Project>
-      <Name>Huanlin</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -210,6 +204,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj">
+      <Project>{56C835FF-C91D-47AC-BBB6-BFD4AF9D815F}</Project>
+      <Name>Huanlin.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

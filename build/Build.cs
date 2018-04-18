@@ -49,8 +49,14 @@ class Build : NukeBuild
             .Executes(() =>
             {
                 var nugetSettings = DefaultNuGetPack.SetBasePath(RootDirectory);
-                string nuspecFileName = RootDirectory / $"nuspec/NChinese.nuspec";
+                string nuspecFileName = RootDirectory / $"nuspec/Huanlin.Common.nuspec";
                 Logger.Info($"Creating Nuget package with {nuspecFileName}");
                 NuGetPack(nuspecFileName, s => nugetSettings);
+
+                nugetSettings = DefaultNuGetPack.SetBasePath(RootDirectory);
+                nuspecFileName = RootDirectory / $"nuspec/Huanlin.Windows.nuspec";
+                Logger.Info($"Creating Nuget package with {nuspecFileName}");
+                NuGetPack(nuspecFileName, s => nugetSettings);
+
             });
 }

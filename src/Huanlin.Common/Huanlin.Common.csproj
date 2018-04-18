@@ -4,7 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net452</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <RootNamespace>Huanlin</RootNamespace>
+    <RootNamespace>Huanlin.Common</RootNamespace>
     <IsPackable>False</IsPackable>
     <NoWarn>CS0649;CS0169</NoWarn>
     <ApplicationIcon />
@@ -16,9 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.10.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="Serilog" Version="2.7.1-dev-00972" />
+    <Compile Remove="Http\WebHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Management" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Huanlin.Common\Huanlin.Common.csproj" />
+    <PackageReference Include="Serilog" Version="2.7.1-dev-00972" />
   </ItemGroup>
 
 </Project> 

@@ -3,8 +3,8 @@
 namespace Test.Huanlin
 {
     /// <summary>
-    ///This is a test class for Huanlin.Helpers.ByteHelper and is intended
-    ///to contain all Huanlin.Helpers.ByteHelper Unit Tests
+    ///This is a test class for Huanlin.Common.Helpers.ByteHelper and is intended
+    ///to contain all Huanlin.Common.Helpers.ByteHelper Unit Tests
     ///</summary>
     [TestFixture]
 	public class ByteHelperTest
@@ -17,13 +17,13 @@ namespace Test.Huanlin
 		{
 			byte aByte = 0xb8;
 			byte expected = 0x1d;
-			byte actual = global::Huanlin.Helpers.ByteHelper.Reverse(aByte);
-			Assert.AreEqual(expected, actual, "Huanlin.Helpers.ByteHelper.Reverse 測試失敗!");
+			byte actual = global::Huanlin.Common.Helpers.ByteHelper.Reverse(aByte);
+			Assert.AreEqual(expected, actual, "Huanlin.Common.Helpers.ByteHelper.Reverse 測試失敗!");
 
 			aByte = 0x93;
 			expected = 0xc9;
-			actual = global::Huanlin.Helpers.ByteHelper.Reverse(aByte);
-			Assert.AreEqual(expected, actual, "Huanlin.Helpers.ByteHelper.Reverse 測試失敗!");
+			actual = global::Huanlin.Common.Helpers.ByteHelper.Reverse(aByte);
+			Assert.AreEqual(expected, actual, "Huanlin.Common.Helpers.ByteHelper.Reverse 測試失敗!");
 		}
 
 	}

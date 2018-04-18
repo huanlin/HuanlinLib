@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography;
+using System.Text;
 using Huanlin.Collections;
-using Huanlin.Cryptography;
-using Huanlin.Helpers;
+using Huanlin.Common.Cryptography;
+using Huanlin.Common.Helpers;
 
 namespace Huanlin.AppBlock.Registration
 {
