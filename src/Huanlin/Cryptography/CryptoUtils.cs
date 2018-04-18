@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Configuration;
-using System.Security.Cryptography;
 
 // A simple, string-oriented wrapper class for encryption functions, including 
 // Hashing, Symmetric Encryption, and Asymmetric Encryption. 

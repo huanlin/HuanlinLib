@@ -38,33 +38,33 @@ namespace Huanlin.Helpers
         /// </summary>
         /// <param name="theObject"></param>
         /// <param name="queryString">Form example</param>
-        public static void SetPropertiesFromUrlQueryString(object theObject, string queryString)
-        {
-            string[] parameters = queryString.Split('&');
-            foreach (string param in parameters)
-            {
-                string[] nameValue = param.Split('=');
-                if (nameValue.Length == 2)
-                {
-                    string name = nameValue[0];
-                    string value = HttpUtility.UrlDecode(nameValue[1]);
+        //public static void SetPropertiesFromUrlQueryString(object theObject, string queryString)
+        //{
+        //    string[] parameters = queryString.Split('&');
+        //    foreach (string param in parameters)
+        //    {
+        //        string[] nameValue = param.Split('=');
+        //        if (nameValue.Length == 2)
+        //        {
+        //            string name = nameValue[0];
+        //            string value = HttpUtility.UrlDecode(nameValue[1]);
 
-                    var aType = theObject.GetType();
-                    var aProperty = aType.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                    if (aProperty != null)
-                    {
-                        if (aProperty.PropertyType.IsEnum)
-                        {
-                            var valueObj = Enum.Parse(aProperty.PropertyType, value);
-                            aProperty.SetValue(theObject, valueObj, null);
-                        }
-                        else
-                        {
-                            aProperty.SetValue(theObject, value, null);
-                        }
-                    }
-                }
-            }
-        }
+        //            var aType = theObject.GetType();
+        //            var aProperty = aType.GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+        //            if (aProperty != null)
+        //            {
+        //                if (aProperty.PropertyType.IsEnum)
+        //                {
+        //                    var valueObj = Enum.Parse(aProperty.PropertyType, value);
+        //                    aProperty.SetValue(theObject, valueObj, null);
+        //                }
+        //                else
+        //                {
+        //                    aProperty.SetValue(theObject, value, null);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

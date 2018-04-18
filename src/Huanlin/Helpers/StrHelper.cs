@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 
 namespace Huanlin.Helpers
 {
@@ -291,24 +289,24 @@ namespace Huanlin.Helpers
         /// <param name="input">欲檢查的字串</param>
         /// <param name="hasWords">要搜尋的字詞。</param>
         /// <returns>有符合的字詞</returns>
-        public static MatchCollection HasWords(string input,
-           params string[] hasWords)
-        {
-            StringBuilder sb = new StringBuilder(hasWords.Length + 50);
-            //sb.Append("[");
+        //public static MatchCollection HasWords(string input,
+        //   params string[] hasWords)
+        //{
+        //    StringBuilder sb = new StringBuilder(hasWords.Length + 50);
+        //    //sb.Append("[");
 
-            foreach (string s in hasWords)
-            {
-                sb.AppendFormat("({0})|",
-                   HttpUtility.HtmlEncode(s.Trim()));
-            }
+        //    foreach (string s in hasWords)
+        //    {
+        //        sb.AppendFormat("({0})|",
+        //           HttpUtility.HtmlEncode(s.Trim()));
+        //    }
 
-            string pattern = sb.ToString();
-            pattern = pattern.TrimEnd('|'); // +"]";
+        //    string pattern = sb.ToString();
+        //    pattern = pattern.TrimEnd('|'); // +"]";
 
-            Regex regEx = new Regex(pattern, RegexOptions.Multiline);
-            return regEx.Matches(input);
-        }
+        //    Regex regEx = new Regex(pattern, RegexOptions.Multiline);
+        //    return regEx.Matches(input);
+        //}
 
         /// <summary>
         /// 檢查傳入的字串是否包含特定的辭彙。字串比對時有分大小寫。
@@ -316,23 +314,23 @@ namespace Huanlin.Helpers
         /// <param name="input">欲檢查的字串</param>
         /// <param name="words">要搜尋的字詞集合，元素必須是 string。</param>
         /// <returns>有符合的字詞</returns>
-        public static MatchCollection HasWords(string input, ICollection words)
-        {
-            StringBuilder sb = new StringBuilder(words.Count * 4);
-            //sb.Append("[");
+        //public static MatchCollection HasWords(string input, ICollection words)
+        //{
+        //    StringBuilder sb = new StringBuilder(words.Count * 4);
+        //    //sb.Append("[");
 
-            foreach (string s in words)
-            {
-                sb.AppendFormat("({0})|",
-                   HttpUtility.HtmlEncode(s.Trim()));
-            }
+        //    foreach (string s in words)
+        //    {
+        //        sb.AppendFormat("({0})|",
+        //           HttpUtility.HtmlEncode(s.Trim()));
+        //    }
 
-            string pattern = sb.ToString();
-            pattern = pattern.TrimEnd('|'); // +"]";
+        //    string pattern = sb.ToString();
+        //    pattern = pattern.TrimEnd('|'); // +"]";
 
-            Regex regEx = new Regex(pattern, RegexOptions.Multiline);
-            return regEx.Matches(input);
-        }
+        //    Regex regEx = new Regex(pattern, RegexOptions.Multiline);
+        //    return regEx.Matches(input);
+        //}
 
         /// <summary>
         /// 將字串以 MD5 編碼。
