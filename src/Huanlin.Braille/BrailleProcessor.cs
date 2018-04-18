@@ -170,6 +170,12 @@ namespace Huanlin.Braille
 				return s_Processor;
 			}
 
+            if (zhuyinConverter == null)
+            {
+                // create default zhuyin reverse converter if not specified.
+                zhuyinConverter = new ZhuyinReverseConverter(new ZhuyinReverseConversionProvider());
+            }
+
 			s_Processor = new BrailleProcessor(zhuyinConverter);
 			return s_Processor;
 		}
