@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0D0D85CA-8F1B-4E44-996D-02C294F01E60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huanlin.Braille", "Huanlin.Braille\Huanlin.Braille.csproj", "{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huanlin", "Huanlin\Huanlin.csproj", "{4C2793DC-4827-4DC4-AF4C-F966D8290077}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huanlin.WinForms", "Huanlin.WinForms\Huanlin.WinForms.csproj", "{75572453-C3BC-4CB2-8CD3-D5460C2027A2}"
@@ -21,9 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huanlin.Web", "Huanlin.Web\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{1B5E7B86-F197-49F3-BCE9-11DEEE40BF3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Huanlin", "tests\Test.Huanlin\Test.Huanlin.csproj", "{FFE0B43B-CE54-4574-889A-B04808DAE0FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Huanlin.Braille", "tests\Test.Huanlin.Braille\Test.Huanlin.Braille.csproj", "{A67E0D18-8A3D-4A47-9A34-17A280EF7508}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Huanlin", "..\tests\Test.Huanlin\Test.Huanlin.csproj", "{FFE0B43B-CE54-4574-889A-B04808DAE0FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,18 +31,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Debug|x64.ActiveCfg = Debug|x64
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Debug|x64.Build.0 = Debug|x64
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Debug|x86.ActiveCfg = Debug|x86
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Debug|x86.Build.0 = Debug|x86
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Release|x64.ActiveCfg = Release|x64
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Release|x64.Build.0 = Release|x64
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Release|x86.ActiveCfg = Release|x86
-		{FFE6D448-5035-4A50-A0E1-E7B4152CB90A}.Release|x86.Build.0 = Release|x86
 		{4C2793DC-4827-4DC4-AF4C-F966D8290077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C2793DC-4827-4DC4-AF4C-F966D8290077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C2793DC-4827-4DC4-AF4C-F966D8290077}.Debug|x64.ActiveCfg = Debug|x64
@@ -125,25 +109,12 @@ Global
 		{FFE0B43B-CE54-4574-889A-B04808DAE0FD}.Release|x64.Build.0 = Release|Any CPU
 		{FFE0B43B-CE54-4574-889A-B04808DAE0FD}.Release|x86.ActiveCfg = Release|Any CPU
 		{FFE0B43B-CE54-4574-889A-B04808DAE0FD}.Release|x86.Build.0 = Release|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|x64.Build.0 = Debug|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Debug|x86.Build.0 = Debug|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|x64.ActiveCfg = Release|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|x64.Build.0 = Release|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|x86.ActiveCfg = Release|Any CPU
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FFE0B43B-CE54-4574-889A-B04808DAE0FD} = {1B5E7B86-F197-49F3-BCE9-11DEEE40BF3B}
-		{A67E0D18-8A3D-4A47-9A34-17A280EF7508} = {1B5E7B86-F197-49F3-BCE9-11DEEE40BF3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {729E0534-C975-497C-AE0C-5973AE7B3892}

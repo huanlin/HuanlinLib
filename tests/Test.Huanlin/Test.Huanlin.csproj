@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A67E0D18-8A3D-4A47-9A34-17A280EF7508}</ProjectGuid>
+    <ProjectGuid>{FFE0B43B-CE54-4574-889A-B04808DAE0FD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test.Huanlin.Braille</RootNamespace>
-    <AssemblyName>Test.Huanlin.Braille</AssemblyName>
+    <RootNamespace>Test.Huanlin</RootNamespace>
+    <AssemblyName>Test.Huanlin</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -56,24 +56,17 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrailleDocumentTest.cs" />
-    <Compile Include="BrailleProcesserTest.cs" />
-    <Compile Include="ChineseWordConverterTest.cs" />
-    <Compile Include="EnglishWordConverterTest.cs" />
-    <Compile Include="Shared.cs" />
+    <Compile Include="ByteHelperTest.cs" />
+    <Compile Include="CharHelperTest.cs" />
+    <Compile Include="IPAddressPatternTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestData\TestData_Braille.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Compile Include="StrHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -83,11 +76,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Huanlin.Braille\Huanlin.Braille.csproj">
-      <Project>{ffe6d448-5035-4a50-a0e1-e7b4152cb90a}</Project>
-      <Name>Huanlin.Braille</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Huanlin\Huanlin.csproj">
+    <ProjectReference Include="..\..\src\Huanlin\Huanlin.csproj">
       <Project>{4c2793dc-4827-4dc4-af4c-f966d8290077}</Project>
       <Name>Huanlin</Name>
     </ProjectReference>
@@ -107,9 +96,6 @@
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.RollingFile">
       <Version>3.3.1-dev-00771</Version>
-    </PackageReference>
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.5.0-preview2-26406-04</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
