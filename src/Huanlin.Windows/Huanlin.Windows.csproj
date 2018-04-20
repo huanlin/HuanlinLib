@@ -5,6 +5,10 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\net452</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Forms\RichTextBoxHL.bmp" />
   </ItemGroup>

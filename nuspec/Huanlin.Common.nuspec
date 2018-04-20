@@ -19,6 +19,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="src\Huanlin.Common\bin\Debug\Huanlin.Common.dll" target="lib\net452\Huanlin.Common.dll" />
+    <file src="src\Huanlin.Common\bin\Debug\net452\Huanlin.Common.dll" target="lib\net452\Huanlin.Common.dll" />
   </files>
 </package>

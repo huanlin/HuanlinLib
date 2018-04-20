@@ -23,6 +23,6 @@
     </frameworkAssemblies>    
   </metadata>
   <files>
-    <file src="src\Huanlin.Windows\bin\Debug\Huanlin.Windows.dll" target="lib\net452\Huanlin.Windows.dll" />
+    <file src="src\Huanlin.Windows\bin\Debug\net452\Huanlin.Windows.dll" target="lib\net452\Huanlin.Windows.dll" />
   </files>
 </package>
