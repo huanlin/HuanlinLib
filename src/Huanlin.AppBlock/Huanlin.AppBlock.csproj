@@ -207,7 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj">
-      <Project>{56C835FF-C91D-47AC-BBB6-BFD4AF9D815F}</Project>
+      <Project>{56c835ff-c91d-47ac-bbb6-bfd4af9d815f}</Project>
       <Name>Huanlin.Common</Name>
     </ProjectReference>
   </ItemGroup>
