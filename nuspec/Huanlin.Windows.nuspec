@@ -5,7 +5,7 @@
     <version>$version$</version>
     <authors>Michael Tsai</authors>
     <owners>Michael Tsai</owners>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/huanlin/HuanlinLib/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/huanlin/HuanlinLib</projectUrl>
     <description>Huanlin library for Windows specific APIs.</description>
@@ -15,8 +15,12 @@
     <repository url="https://github.com/huanlin/HuanlinLib" />
     <dependencies>
       <group targetFramework=".NETFramework4.5.2">
+        <dependency id="Huanlin.Common" version="$version$" exclude="Build,Analyzers" />
       </group>
     </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework=".NETFramework4.5.2" />
+    </frameworkAssemblies>    
   </metadata>
   <files>
     <file src="src\Huanlin.Windows\bin\Debug\Huanlin.Windows.dll" target="lib\net452\Huanlin.Windows.dll" />

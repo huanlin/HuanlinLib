@@ -14,14 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.7.1-dev-00972" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 

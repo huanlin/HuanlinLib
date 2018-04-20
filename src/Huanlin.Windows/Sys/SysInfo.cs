@@ -2,7 +2,7 @@
 using System.Management;
 using System.Net;
 
-namespace Huanlin.Sys
+namespace Huanlin.Windows.Sys
 {
     /// <summary>
     /// 系統資訊。

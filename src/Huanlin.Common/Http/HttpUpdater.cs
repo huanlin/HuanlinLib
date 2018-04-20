@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Cache;
 using System.Text;
 using System.Threading.Tasks;
-using Serilog;
 
 namespace Huanlin.Http
 {
@@ -80,11 +79,8 @@ namespace Huanlin.Http
 		private event FileUpdateEventHandler m_FileUpdatedEvent;
 		private event DownloadProgressChangedEventHandler m_DownloadProgressChangedEvent;
 		
-        internal ILogger Logger { get; private set; }
-
-		public HttpUpdater(ILogger logger)
+		public HttpUpdater()
 		{
-            Logger = logger ?? throw new ArgumentNullException("logger");
 			m_ClientPath = "";
 			m_ChangeLogFileName = "";
 
@@ -212,8 +208,6 @@ namespace Huanlin.Http
 		/// </summary>
 		public async Task GetUpdateListAsync()
 		{
-            Logger.Debug("開始獲取更新檔案清單。");
-
             CheckClientPath();
 			CheckServerUrl();
 
@@ -357,10 +351,10 @@ namespace Huanlin.Http
 					if (item.Operation != UpdateAction.None)
 					{
 						m_UpdateItems.Add(item);
-                        Logger.Debug("找到需要更新的檔案： {@Item}", item);
+                        // Logger.Debug("找到需要更新的檔案： {@Item}", item);
 					}
 				}
-                Logger.Debug($"完成獲取更新檔案清單，共 {m_UpdateItems.Count} 個更新項目。");
+                //Logger.Debug($"完成獲取更新檔案清單，共 {m_UpdateItems.Count} 個更新項目。");
             }
 			finally
 			{
@@ -383,8 +377,6 @@ namespace Huanlin.Http
 			{
 				return 0;
 			}
-
-            Logger.Debug("開始更新檔案。");
 
             CleanUp();            
 
@@ -426,7 +418,7 @@ namespace Huanlin.Http
 				    switch (item.Operation)
 					{
 						case UpdateAction.Overwrite:
-                            Logger.Debug($"正在下載檔案，來源: {serverFileUrl}，目的： {tempFileName}");
+                            // Logger.Debug($"正在下載檔案，來源: {serverFileUrl}，目的： {tempFileName}");
 
 							// 1.下載檔案並存成暫時檔名
 							await myWebClient.DownloadFileTaskAsync(new Uri(serverFileUrl), tempFileName);
@@ -500,7 +492,7 @@ namespace Huanlin.Http
 						}
 					}
 				}
-                Logger.Error(ex, "更新檔案時發生錯誤!");
+                // Logger.Error(ex, "更新檔案時發生錯誤!");
 				throw ex;
 			}
 			finally

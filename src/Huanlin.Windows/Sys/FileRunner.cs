@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
+using System.Text;
 
-namespace Huanlin.Sys
+namespace Huanlin.Windows.Sys
 {
-	/// <summary>
-	/// 此類別可用來執行檔案。
-	/// </summary>
-	public class FileRunner : IDisposable
+    /// <summary>
+    /// 此類別可用來執行檔案。
+    /// </summary>
+    public class FileRunner : IDisposable
 	{
 		private ProcessStartInfo m_StartInfo;
 		private Process m_Process;

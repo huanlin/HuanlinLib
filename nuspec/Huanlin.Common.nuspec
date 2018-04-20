@@ -5,7 +5,7 @@
     <version>$version$</version>
     <authors>Michael Tsai</authors>
     <owners>Michael Tsai</owners>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/huanlin/HuanlinLib/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/huanlin/HuanlinLib</projectUrl>
     <description>Huanlin library for common utilities.</description>
@@ -15,8 +15,6 @@
     <repository url="https://github.com/huanlin/HuanlinLib" />
     <dependencies>
       <group targetFramework=".NETFramework4.5.2">
-        <dependency id="NUnit" version="3.10.1" exclude="Build,Analyzers" />
-        <dependency id="Serilog" version="2.7.1" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

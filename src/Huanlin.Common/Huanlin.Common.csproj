@@ -14,13 +14,4 @@
     <Compile Remove="Http\WebHelper.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Management" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Serilog" Version="2.7.1-dev-00972" />
-  </ItemGroup>
-
 </Project> 
