@@ -73,9 +73,10 @@ namespace Huanlin.Http
 		private string m_ServerUri;
 		private string m_ChangeLogFileName;		// 應用程式的變更記錄檔名，若有指定，在進行更新時會自動下載此檔案.
 		private List<UpdateItem> m_UpdateItems;
+        private readonly object _lockObject = new object();
 
-		// 事件：更新開始、下載進度回報、更新完成
-		private event FileUpdateEventHandler m_FileUpdatingEvent;
+        // 事件：更新開始、下載進度回報、更新完成
+        private event FileUpdateEventHandler m_FileUpdatingEvent;
 		private event FileUpdateEventHandler m_FileUpdatedEvent;
 		private event DownloadProgressChangedEventHandler m_DownloadProgressChangedEvent;
 		
@@ -89,7 +90,7 @@ namespace Huanlin.Http
 
 		public void Dispose()
 		{
-			lock (this)
+			lock (_lockObject)
 			{
 				if (!m_Disposed)
 				{
@@ -472,8 +473,8 @@ namespace Huanlin.Http
 
 				return updCount;
 			}
-			catch (Exception ex)
-			{
+			catch (Exception)
+            {
 				// Rollback 
 				RollbackItem rollback;
 
@@ -493,8 +494,8 @@ namespace Huanlin.Http
 					}
 				}
                 // Logger.Error(ex, "更新檔案時發生錯誤!");
-				throw ex;
-			}
+                throw;
+            }
 			finally
 			{
 				// 解除訂閱 WebClient 事件

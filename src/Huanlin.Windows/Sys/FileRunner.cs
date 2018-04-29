@@ -18,7 +18,9 @@ namespace Huanlin.Windows.Sys
 		private string m_ErrMsg;
 		private StringBuilder m_StdError;
 		private StringBuilder m_StdOutput;
-		private event DataReceivedEventHandler m_StdOutputReceivedEvent;
+        private readonly object _lockObject = new object();
+
+        private event DataReceivedEventHandler m_StdOutputReceivedEvent;
 		private event EventHandler m_ExitedEvent;
 
 		public FileRunner()
@@ -118,18 +120,18 @@ namespace Huanlin.Windows.Sys
 					return false;
 				}
 			}
-			catch (Exception ex)
-			{
+			catch (Exception)
+            {
 				m_Process.Close();
 				m_Process.Dispose();
 				m_Process = null;
-				throw ex;
-			}			
+                throw;
+            }			
 		}
 
 		void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
 		{
-			lock (this)
+			lock (_lockObject)
 			{
 				m_StdOutput.Append(e.Data);
 				m_StdOutput.Append(System.Environment.NewLine);

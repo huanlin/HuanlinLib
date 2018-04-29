@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Huanlin.Common.Helpers;
 
 namespace Huanlin.Extensions
 {
@@ -12,16 +13,16 @@ namespace Huanlin.Extensions
         /// <summary>
         /// Reverses a string.
         /// </summary>
-        /// <param name = "value">The string to be reversed.</param>
+        /// <param name = "input">The string to be reversed.</param>
         /// <returns>The reversed string</returns>
-        public static string Reverse(this string value)
+        public static string Reverse(this string input)
         {
-            if (String.IsNullOrEmpty(value) || (value.Length == 1))
+            if (String.IsNullOrEmpty(input) || (input.Length == 1))
             {
-                return value;
+                return input;
             }
 
-            var chars = value.ToCharArray();
+            var chars = input.ToCharArray();
             Array.Reverse(chars);
             return new string(chars);
         }
@@ -29,47 +30,74 @@ namespace Huanlin.Extensions
         /// <summary>
         /// Returns the left part of the string.
         /// </summary>
-        /// <param name="value">The original string.</param>
+        /// <param name="input">The original string.</param>
         /// <param name="characterCount">The character count to be returned.</param>
         /// <returns>The left part</returns>
-        public static string Left(this string value, int characterCount)
+        public static string Left(this string input, int characterCount)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
-            if (characterCount >= value.Length)
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+            if (characterCount >= input.Length)
                 throw new ArgumentOutOfRangeException("characterCount", characterCount, "characterCount must be less than length of string");
-            return value.Substring(0, characterCount);
+            return input.Substring(0, characterCount);
         }
 
         /// <summary>
         /// Returns the Right part of the string.
         /// </summary>
-        /// <param name="value">The original string.</param>
+        /// <param name="input">The original string.</param>
         /// <param name="characterCount">The character count to be returned.</param>
         /// <returns>The right part</returns>
-        public static string Right(this string value, int characterCount)
+        public static string Right(this string input, int characterCount)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
-            if (characterCount >= value.Length)
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+            if (characterCount >= input.Length)
                 throw new ArgumentOutOfRangeException("characterCount", characterCount, "characterCount must be less than length of string");
-            return value.Substring(value.Length - characterCount);
+            return input.Substring(input.Length - characterCount);
         }
 
-        public static string EnsureEndWith(this string value, string s)
+        public static string EnsureEndWith(this string input, string s)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
-            if (value.EndsWith(s))
+            if (input == null)
+                throw new ArgumentNullException(nameof(input));
+            if (input.EndsWith(s))
             {
-                return value;
+                return input;
             }
-            return value + s;
+            return input + s;
         }
 
-        public static string EnsureEndWithDirectorySeparator(this string value)
+        public static string EnsureEndWithDirectorySeparator(this string input)
         {
-            return value.EnsureEndWith(System.IO.Path.DirectorySeparatorChar.ToString());
+            return input.EnsureEndWith(System.IO.Path.DirectorySeparatorChar.ToString());
+        }
+
+        public static string EnsureNotStartWith(this string input, string start)
+        {
+            if (String.IsNullOrEmpty(input) || String.IsNullOrEmpty(start))
+                return input;
+            if (input.StartsWith(start))
+            {
+                return input.Remove(0, start.Length);
+            }
+            return input;
+        }
+
+        public static string EnsureNotEndWith(this string input, string end)
+        {
+            if (String.IsNullOrEmpty(input) || String.IsNullOrEmpty(end))
+                return input;
+            if (input.EndsWith(end))
+            {
+                return input.Substring(0, input.Length - end.Length);
+            }
+            return input;
+        }
+
+        public static string EnsureNotEnclosedWith(this string input, string start, string end)
+        {
+            return input.EnsureNotStartWith(start).EnsureNotEndWith(end);
         }
 
         #region To X conversions
@@ -78,120 +106,64 @@ namespace Huanlin.Extensions
         /// Parses a string into an Enum
         /// </summary>
         /// <typeparam name="T">The type of the Enum</typeparam>
-        /// <param name="value">String value to parse</param>
+        /// <param name="input">String value to parse</param>
         /// <param name="ignorecase">Ignore the case of the string being parsed</param>
         /// <returns>The Enum corresponding to the stringExtensions</returns>
-        public static T ToEnum<T>(this string value, bool ignorecase)
+        public static T ToEnum<T>(this string input, bool ignorecase)
         {
-            if (value == null)
+            if (input == null)
                 throw new ArgumentNullException("Value");
 
-            value = value.Trim();
+            input = input.Trim();
 
-            if (value.Length == 0)
+            if (input.Length == 0)
                 throw new ArgumentNullException("Must specify valid information for parsing in the string.", "value");
 
             Type t = typeof(T);
             if (!t.IsEnum)
                 throw new ArgumentException("Type provided must be an Enum.", "T");
 
-            return (T)Enum.Parse(t, value, ignorecase);
+            return (T)Enum.Parse(t, input, ignorecase);
         }
 
         /// <summary>
-        /// Toes the integer.
+        /// Convert to integer.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="input">The value.</param>
         /// <param name="defaultvalue">The defaultvalue.</param>
         /// <returns></returns>
-        public static int ToInteger(this string value, int defaultvalue)
-        {
-            return (int)ToDouble(value, defaultvalue);
-        }
-
-        /// <summary>
-        /// Toes the integer.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        public static int ToInteger(this string value)
-        {
-            return ToInteger(value, 0);
-        }
+        public static int ToInteger(this string input, int defaultvalue) => StrHelper.ToInteger(input, defaultvalue);
 
         /// <summary>
         /// Toes the double.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="input">The value.</param>
         /// <param name="defaultvalue">The defaultvalue.</param>
         /// <returns></returns>
-        public static double ToDouble(this string value, double defaultvalue)
+        public static double ToDouble(this string input, double defaultValue)
         {
-            double result;
-            if (double.TryParse(value, out result))
-            {
-                return result;
-            }
-            else return defaultvalue;
-        }
-
-        /// <summary>
-        /// Toes the double.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        public static double ToDouble(this string value)
-        {
-            return ToDouble(value, 0);
+            return StrHelper.ToDouble(input, defaultValue);
         }
 
         /// <summary>
         /// Toes the date time.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="defaultvalue">The defaultvalue.</param>
+        /// <param name="input">The value.</param>
+        /// <param name="defaultValue">The defaultvalue.</param>
         /// <returns></returns>
-        public static DateTime? ToDateTime(this string value, DateTime? defaultvalue)
+        public static DateTime? ToDateTime(this string input, DateTime? defaultValue)
         {
-            DateTime result;
-            if (DateTime.TryParse(value, out result))
-            {
-                return result;
-            }
-            else return defaultvalue;
-        }
-
-        /// <summary>
-        /// Toes the date time.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        public static DateTime? ToDateTime(this string value)
-        {
-            return ToDateTime(value, null);
+            return StrHelper.ToDateTime(input, defaultValue);
         }
 
         /// <summary>
         /// Converts a string value to bool value, supports "T" and "F" conversions.
         /// </summary>
-        /// <param name="value">The string value.</param>
+        /// <param name="input">The string value.</param>
         /// <returns>A bool based on the string value</returns>
-        public static bool? ToBoolean(this string value)
+        public static bool? ToBoolean(this string input)
         {
-            if (string.Compare("T", value, true) == 0)
-            {
-                return true;
-            }
-            if (string.Compare("F", value, true) == 0)
-            {
-                return false;
-            }
-            bool result;
-            if (bool.TryParse(value, out result))
-            {
-                return result;
-            }
-            else return null;
+            return StrHelper.ToBoolean(input);
         }
 
         #endregion To X conversions

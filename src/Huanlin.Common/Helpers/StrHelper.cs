@@ -11,6 +11,87 @@ namespace Huanlin.Common.Helpers
     /// </summary>
     public static class StrHelper
     {
+        public static int ToInteger(string input, int defaultValue)
+        {
+            if (int.TryParse(input, out int result))
+            {
+                return result;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public static double ToDouble(string input, double defaultValue)
+        {
+            if (double.TryParse(input, out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        /// <summary>
+        /// Converts a string value to bool value, supports "T" and "F" conversions.
+        /// </summary>
+        /// <param name="value">The string value.</param>
+        /// <returns>A bool based on the string value</returns>
+        public static bool? ToBoolean(string input)
+        {
+            if (string.Compare("T", input, true) == 0)
+            {
+                return true;
+            }
+            if (string.Compare("F", input, true) == 0)
+            {
+                return false;
+            }
+
+            if (Boolean.TryParse(input, out bool result))
+            {
+                return result;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Converts a string value to bool value, supports "T" and "F" conversions.
+        /// </summary>
+        /// <param name="value">The string value.</param>
+        /// <returns>A bool based on the string value</returns>
+        public static bool ToBoolean(string input, bool defaultValue)
+        {
+            return ToBoolean(input) ?? defaultValue;
+        }
+
+
+        public static DateTime ToDateTime(string input, DateTime defaultValue)
+        {
+            if (DateTime.TryParse(input, out DateTime result))
+            {
+                return result;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
+        public static DateTime? ToDateTime(string input, DateTime? defaultValue)
+        {
+            if (DateTime.TryParse(input, out DateTime result))
+            {
+                return result;
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+
         /// <summary>
         /// Append a slash character '\' to string.
         /// </summary>
@@ -19,7 +100,7 @@ namespace Huanlin.Common.Helpers
         public static string AppendSlash(string input)
         {
             if (input == null)
-                    return @"\";
+                return @"\";
             if (input.EndsWith("/") || input.EndsWith("\\"))
                 return input;
             return input + "\\";
@@ -35,7 +116,7 @@ namespace Huanlin.Common.Helpers
             if (input == null)
                 return "";
             if (input.EndsWith("/") || input.EndsWith("\\"))
-                return input.Remove(input.Length-1, 1);
+                return input.Remove(input.Length - 1, 1);
             return input;
         }
 
@@ -50,7 +131,7 @@ namespace Huanlin.Common.Helpers
                 return "";
             int i = input.LastIndexOfAny(@"/\".ToCharArray());
             if (i > 0)
-                return input.Substring(0, i+1);
+                return input.Substring(0, i + 1);
             return @"\";
         }
 
@@ -63,9 +144,9 @@ namespace Huanlin.Common.Helpers
         {
             if (s == null)
                 return "";
-            int i = s.LastIndexOfAny(@"/\".ToCharArray(), s.Length-1);
+            int i = s.LastIndexOfAny(@"/\".ToCharArray(), s.Length - 1);
             if (i > 0)
-                return s.Substring(i+1);
+                return s.Substring(i + 1);
             return "";
         }
 
@@ -133,8 +214,8 @@ namespace Huanlin.Common.Helpers
             if (fullShapeSpaces)
             {
                 pattern = @"[ |　]";
-            }				
-            
+            }
+
             Regex regEx = new Regex(pattern, RegexOptions.Multiline);
 
             return regEx.Replace(input, replace);
@@ -175,9 +256,9 @@ namespace Huanlin.Common.Helpers
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static bool CheckIdno(string idno) 
+        public static bool CheckIdno(string idno)
         {
-            int[] letter_weight = 
+            int[] letter_weight =
             {
                 // A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P   Q   R
                 10, 11, 12, 13, 14, 15, 16, 17, 34, 18, 19, 20, 21, 22, 35, 23, 24, 25,
@@ -185,27 +266,27 @@ namespace Huanlin.Common.Helpers
                 // S   T   U   V   W   X   Y   Z
             };
 
-            int  i;
+            int i;
             int[] D = new int[9];	 // 1..9
             int sum;
 
             if (idno.Length != 10)
                 return false;
             idno = idno.ToUpper();
-            if (!Char.IsLetter(idno[0]) || (idno[1] != '1' && idno[1] != '2')) 
+            if (!Char.IsLetter(idno[0]) || (idno[1] != '1' && idno[1] != '2'))
                 return false;
             for (i = 1; i < 10; i++)
             {
                 if (!Char.IsDigit(idno, i))
                     return false;
             }
- 
+
             for (i = 0; i < 9; i++) // 1..9
             {
-                D[i] = Int32.Parse(idno.Substring(i+1, 1));
+                D[i] = Int32.Parse(idno.Substring(i + 1, 1));
             }
 
-            i = letter_weight[idno[0]-'A'];
+            i = letter_weight[idno[0] - 'A'];
             sum = (i / 10) + (i % 10) * 9;
             sum = sum + 8 * D[0] + 7 * D[1] + 6 * D[2] + 5 * D[3]
                 + 4 * D[4] + 3 * D[5] + 2 * D[6] + D[7] + D[8];
@@ -590,8 +671,9 @@ namespace Huanlin.Common.Helpers
                 return "";
             char[] charArray = new char[s.Length];
             int len = s.Length - 1;
-            for (int i = 0; i <= len; i++) {
-                charArray[i] = s[len-i];
+            for (int i = 0; i <= len; i++)
+            {
+                charArray[i] = s[len - i];
             }
             return new string(charArray);
         }
@@ -602,7 +684,7 @@ namespace Huanlin.Common.Helpers
         /// <param name="s"></param>
         /// <returns></returns>
         public static MatchCollection FindTagPairs(string s)
-        {			
+        {
             return Regex.Matches(s, RegExpPatterns.OneTagPair);
         }
 
@@ -623,10 +705,13 @@ namespace Huanlin.Common.Helpers
         /// <param name="itemSeparator">用來分隔每個 key-value 項目的字元。</param>
         /// <param name="keyValueSeparator">用來分隔 key 和 value 的字元。</param>
         /// <returns>Key-value pair 串列。</returns>
-        public static List<KeyValuePair<string, string>> SplitKeyValuePairs(string s,
+        public static List<KeyValuePair<string, string>> SplitToKeyValuePairs(string s,
             char itemSeparator, char keyValueSeparator)
         {
-            List<KeyValuePair<string, string>> keyValues = new List<KeyValuePair<string, string>>();
+            var keyValues = new List<KeyValuePair<string, string>>();
+
+            if (String.IsNullOrEmpty(s))
+                return keyValues;
 
             string[] items = s.Split(new char[] { itemSeparator }, StringSplitOptions.RemoveEmptyEntries);
             string[] keyValue;
@@ -647,6 +732,33 @@ namespace Huanlin.Common.Helpers
                 }
             }
             return keyValues;
+        }
+
+
+        public static Dictionary<string, string> SplitToDictionary(string input,
+            char itemSeparator, char keyValueSeparator)
+        {
+            var dict = new Dictionary<string, string>();
+
+            if (String.IsNullOrEmpty(input))
+                return dict;
+
+            string[] items = input.Split(new char[] { itemSeparator }, StringSplitOptions.RemoveEmptyEntries);
+            string[] keyValue;
+
+            foreach (string item in items)
+            {
+                keyValue = item.Split(keyValueSeparator);
+                if (keyValue.Length >= 2)
+                {
+                    dict.Add(keyValue[0], keyValue[1]);
+                }
+                else if (keyValue.Length >= 1)  // 只有 key 值？
+                {
+                    dict.Add(keyValue[0], String.Empty);
+                }
+            }
+            return dict;
         }
 
         /// <summary>
