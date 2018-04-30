@@ -57,15 +57,32 @@ namespace Huanlin.Extensions
             return input.Substring(input.Length - characterCount);
         }
 
-        public static string EnsureEndWith(this string input, string s)
+
+        public static string EnsureStartWith(this string input, string start)
         {
-            if (input == null)
-                throw new ArgumentNullException(nameof(input));
-            if (input.EndsWith(s))
+            if (String.IsNullOrEmpty(start))
             {
-                return input;
+                throw new Exception($"Argument {nameof(start)} cannot be null or empty string!");
             }
-            return input + s;
+            if (input == null)
+                return start;
+            if (input.StartsWith(start))
+                return input;
+            return start + input;
+        }
+
+        public static string EnsureEndWith(this string input, string end)
+        {
+            if (String.IsNullOrEmpty(end))
+            {
+                throw new Exception($"Argument {nameof(end)} cannot be null or empty string!");
+            }
+
+            if (input == null)
+                return end;
+            if (input.EndsWith(end))
+                return input;
+            return input + end;
         }
 
         public static string EnsureEndWithDirectorySeparator(this string input)
@@ -75,7 +92,12 @@ namespace Huanlin.Extensions
 
         public static string EnsureNotStartWith(this string input, string start)
         {
-            if (String.IsNullOrEmpty(input) || String.IsNullOrEmpty(start))
+            if (String.IsNullOrEmpty(start))
+            {
+                throw new Exception($"Argument {nameof(start)} cannot be null or empty string!");
+            }
+
+            if (String.IsNullOrEmpty(input))
                 return input;
             if (input.StartsWith(start))
             {
@@ -86,7 +108,12 @@ namespace Huanlin.Extensions
 
         public static string EnsureNotEndWith(this string input, string end)
         {
-            if (String.IsNullOrEmpty(input) || String.IsNullOrEmpty(end))
+            if (String.IsNullOrEmpty(end))
+            {
+                throw new Exception($"Argument {nameof(end)} cannot be null or empty string!");
+            }
+
+            if (String.IsNullOrEmpty(input))
                 return input;
             if (input.EndsWith(end))
             {
