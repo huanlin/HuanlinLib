@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using Huanlin.Common.Helpers;
 
-namespace Huanlin.Extensions
+namespace Huanlin.Common.Extensions
 {
     /// <summary>
     /// String extension methods.
     /// </summary>
-    public static class StringExtensions
+    public static class StringExtension
     {
         /// <summary>
         /// Reverses a string.
@@ -57,6 +57,11 @@ namespace Huanlin.Extensions
             return input.Substring(input.Length - characterCount);
         }
 
+
+        public static string EnsureEncloseWith(this string input, string start, string end)
+        {
+            return input.EnsureStartWith(start).EnsureEndWith(end);
+        }
 
         public static string EnsureStartWith(this string input, string start)
         {
@@ -122,7 +127,7 @@ namespace Huanlin.Extensions
             return input;
         }
 
-        public static string EnsureNotEnclosedWith(this string input, string start, string end)
+        public static string EnsureNotEncloseWith(this string input, string start, string end)
         {
             return input.EnsureNotStartWith(start).EnsureNotEndWith(end);
         }
