@@ -1,10 +1,10 @@
 ﻿using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.NuGet;
-using Nuke.Core;
+using Nuke.Common;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
-using static Nuke.Core.IO.FileSystemTasks;
-using static Nuke.Core.IO.PathConstruction;
+using static Nuke.Common.IO.FileSystemTasks;
+using static Nuke.Common.IO.PathConstruction;
 
 class Build : NukeBuild
 {
