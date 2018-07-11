@@ -10,7 +10,7 @@ using Huanlin.Common.Helpers;
 /// Reads a multipart http data stream and returns the file name, content type and file content.
 /// Also, it returns any additional form parameters in a Dictionary.
 /// </summary>
-namespace Hualin.Http
+namespace Huanlin.Http
 {
     public delegate void MultiPartFileHandler(string filename, string contentType, byte[] content);
 
