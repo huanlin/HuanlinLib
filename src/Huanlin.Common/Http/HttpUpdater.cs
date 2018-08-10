@@ -245,6 +245,11 @@ namespace Huanlin.Http
 					info = file.Split(';');
 					infoFilePath = info[0].Trim();			// 從檔案清單項目中取出一個檔名（包含完整路徑）
 
+                    if (String.IsNullOrEmpty(infoFilePath))
+                    {
+                        continue;
+                    }
+
 					if (m_ChangeLogFileName.Equals(infoFilePath, StringComparison.CurrentCultureIgnoreCase))
 					{
 						// 忽略變更記錄檔。
@@ -303,7 +308,7 @@ namespace Huanlin.Http
 						// 第二個參數若以 '=' 字元開始，表示只有 local 跟遠端的檔案版本不同就要更新
 						fileVerInfo = FileVersionInfo.GetVersionInfo(clientFileName);
 						verRemote = new Version(infoParam.Substring(1, infoParam.Length - 1));
-						verLocal = new Version(fileVerInfo.FileVersion);
+						verLocal = new Version(fileVerInfo.FileVersion.Split(' ')[0]);
 
 						if (verRemote != verLocal)
 						{
@@ -332,7 +337,7 @@ namespace Huanlin.Http
 								{
 									// 比對兩邊的版本編號
 									verRemote = new Version(infoParam);
-									verLocal = new Version(fileVerInfo.FileVersion);
+									verLocal = new Version(fileVerInfo.FileVersion.Split(' ')[0]);
 
 									if (verRemote > verLocal)
 									{
@@ -356,6 +361,11 @@ namespace Huanlin.Http
 					}
 				}
                 //Logger.Debug($"完成獲取更新檔案清單，共 {m_UpdateItems.Count} 個更新項目。");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"錯誤：{ex.ToString()}");
+                throw;
             }
 			finally
 			{
