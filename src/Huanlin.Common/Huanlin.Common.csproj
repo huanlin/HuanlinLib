@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <Copyright>Michael Tsai</Copyright>
     <PackageProjectUrl>https://github.com/huanlin/HuanlinLib</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/huanlin/HuanlinLib/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/huanlin/HuanlinLib</RepositoryUrl>
     <PackageTags>utility</PackageTags>
     <RootNamespace>Huanlin.Common</RootNamespace>

@@ -1,62 +1,85 @@
-﻿using Nuke.Common.Tools.GitVersion;
-using Nuke.Common.Tools.NuGet;
+﻿using System.Collections.Generic;
 using Nuke.Common;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using static Nuke.Common.Tools.NuGet.NuGetTasks;
+using Nuke.Common.Git;
+using Nuke.Common.ProjectModel;
+using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Tools.InspectCode;
+using Nuke.Common.Tools.NuGet;
+using static Nuke.Common.ChangeLog.ChangelogTasks;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.NuGet.NuGetTasks;
 
-class Build : NukeBuild
+internal class Build : NukeBuild
 {
     // Console application entry. Also defines the default target.
-    public static int Main () => Execute<Build>(x => x.Compile);
+    public static int Main() => Execute<Build>(x => x.Compile);
 
     // Auto-injection fields:
 
-    [GitVersion] readonly GitVersion GitVersion;
+    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
+    private readonly string Configuration = IsLocalBuild ? "Debug" : "Release";
+
+    [Solution("src/HuanlinLib.sln")] private readonly Solution TheSolution;
+    [GitRepository] private readonly GitRepository GitRepository;
+    [GitVersion] private readonly GitVersion GitVersion;
     // Semantic versioning. Must have 'GitVersion.CommandLine' referenced.
 
-    // [GitRepository] readonly GitRepository GitRepository;
     // Parses origin, branch name and head from git config.
-    
+
     // [Parameter] readonly string MyGetApiKey;
     // Returns command-line arguments and environment variables.
 
-    Target Clean => _ => _
-            .OnlyWhen(() => false) // Disabled for safety.
-            .Executes(() =>
-            {
-                DeleteDirectories(GlobDirectories(SourceDirectory, "**/bin", "**/obj"));
-                EnsureCleanDirectory(OutputDirectory);
-            });
+    private AbsolutePath SourceDirectory => RootDirectory / "src";
+    private AbsolutePath TestsDirectory => RootDirectory / "tests";
+    private AbsolutePath OutputDirectory => RootDirectory / "output";
 
-    Target Restore => _ => _
-            .DependsOn(Clean)
-            .Executes(() =>
-            {
-                DotNetRestore(s => DefaultDotNetRestore);
-            });
+    private Target Clean => _ => _
+             .OnlyWhen(() => false) // Disabled for safety.
+             .Executes(() =>
+             {
+                 DeleteDirectories(GlobDirectories(SourceDirectory, "**/bin", "**/obj"));
+                 EnsureCleanDirectory(OutputDirectory);
+             });
 
-    Target Compile => _ => _
-            .DependsOn(Restore)
-            .Executes(() =>
-            {
-                DotNetBuild(s => DefaultDotNetBuild);
-            });
+    private Target Restore => _ => _
+             .DependsOn(Clean)
+             .Executes(() =>
+             {
+                 DotNetRestore(s => s.SetProjectFile(TheSolution));
+             });
 
-    Target Pack => _ => _
-            .DependsOn(Compile)
-            .Executes(() =>
-            {
-                var nugetSettings = DefaultNuGetPack.SetBasePath(RootDirectory);
-                string nuspecFileName = RootDirectory / $"nuspec/Huanlin.Common.nuspec";
-                Logger.Info($"Creating Nuget package with {nuspecFileName}");
-                NuGetPack(nuspecFileName, s => nugetSettings);
+    private Target Compile => _ => _
+             .DependsOn(Restore)
+             .Executes(() =>
+             {
+                 DotNetBuild(s => s
+                     .SetProjectFile(TheSolution)
+                     .EnableNoRestore()
+                     .SetConfiguration(Configuration)
+                     .SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
+                     .SetFileVersion(GitVersion.GetNormalizedFileVersion())
+                     .SetInformationalVersion(GitVersion.InformationalVersion));
+             });
 
-                nugetSettings = DefaultNuGetPack.SetBasePath(RootDirectory);
-                nuspecFileName = RootDirectory / $"nuspec/Huanlin.Windows.nuspec";
-                Logger.Info($"Creating Nuget package with {nuspecFileName}");
-                NuGetPack(nuspecFileName, s => nugetSettings);
+    private string ChangelogFile => RootDirectory / "CHANGELOG.md";
 
-            });
+    private IEnumerable<string> ChangelogSectionNotes => ExtractChangelogSectionNotes(ChangelogFile);
+
+    private Target Pack => _ => _
+             .DependsOn(Compile)
+             .Executes(() =>
+             {
+
+                 DotNetPack(s => s
+                     .SetProject(TheSolution)
+                     .EnableNoBuild()
+                     .SetConfiguration(Configuration)
+                     .EnableIncludeSymbols()
+                     .SetOutputDirectory(OutputDirectory)
+                     .SetVersion(GitVersion.NuGetVersionV2)
+                     .SetPackageReleaseNotes(GetNuGetReleaseNotes(ChangelogFile, GitRepository)));
+             });
 }

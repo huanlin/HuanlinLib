@@ -10,14 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Forms\RichTextBoxHL.bmp" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Forms\RichTextBoxHL.bmp" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj" />
   </ItemGroup>
 
