@@ -6,6 +6,7 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.InspectCode;
 using Nuke.Common.Tools.NuGet;
+using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.ChangeLog.ChangelogTasks;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
@@ -36,11 +37,11 @@ internal class Build : NukeBuild
     private AbsolutePath TestsDirectory => RootDirectory / "tests";
     private AbsolutePath OutputDirectory => RootDirectory / "output";
 
-    private Target Clean => _ => _
-             .OnlyWhen(() => false) // Disabled for safety.
+    private Target Clean => _ => _             
              .Executes(() =>
              {
-                 DeleteDirectories(GlobDirectories(SourceDirectory, "**/bin", "**/obj"));
+                 GlobDirectories(SourceDirectory, "**/bin", "**/obj").ForEach(DeleteDirectory);
+                 GlobDirectories(TestsDirectory, "**/bin", "**/obj").ForEach(DeleteDirectory);
                  EnsureCleanDirectory(OutputDirectory);
              });
 
@@ -59,8 +60,8 @@ internal class Build : NukeBuild
                      .SetProjectFile(TheSolution)
                      .EnableNoRestore()
                      .SetConfiguration(Configuration)
-                     .SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
-                     .SetFileVersion(GitVersion.GetNormalizedFileVersion())
+                     .SetAssemblyVersion(GitVersion.AssemblySemVer)
+                     .SetFileVersion(GitVersion.AssemblySemVer)
                      .SetInformationalVersion(GitVersion.InformationalVersion));
              });
 
