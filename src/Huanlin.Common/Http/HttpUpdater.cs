@@ -70,10 +70,27 @@ namespace Huanlin.Http
 
         public void Dispose()
         {
-            lock (_lockObject)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Dispose(bool disposing) executes in two distinct scenarios.
+        // If disposing equals true, the method has been called directly
+        // or indirectly by a user's code. Managed and unmanaged resources
+        // can be disposed.
+        // If disposing equals false, the method has been called by the
+        // runtime from inside the finalizer and you should not reference
+        // other objects. Only unmanaged resources can be disposed.
+        protected virtual void Dispose(bool disposing)
+        {
+            // Check to see if Dispose has already been called.
+            if (!m_Disposed)
             {
-                if (!m_Disposed)
+                // If disposing equals true, dispose all managed
+                // and unmanaged resources.
+                if (disposing)
                 {
+                    // Dispose managed resources.
                     FileUpdating = null;
                     FileUpdated = null;
                     DownloadProgressChanged = null;
@@ -82,8 +99,17 @@ namespace Huanlin.Http
                     m_UpdateItems = null;
 
                     m_Disposed = true;
-                    GC.SuppressFinalize(this);
                 }
+
+                // Call the appropriate methods to clean up
+                // unmanaged resources here.
+                // If disposing is false,
+                // only the following code is executed.
+                //CloseHandle(handle);
+                //handle = IntPtr.Zero;
+
+                // Note disposing has been done.
+                m_Disposed = true;
             }
         }
 
