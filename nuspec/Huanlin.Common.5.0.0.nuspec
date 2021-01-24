@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Huanlin.Common</id>
+    <version>5.0.0</version>
+    <authors>Huanlin.Common</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/huanlin/HuanlinLib</projectUrl>
+    <description>Package Description</description>
+    <copyright>Michael Tsai</copyright>
+    <tags>utility</tags>
+    <repository url="https://github.com/huanlin/HuanlinLib" />
+    <dependencies>
+      <group targetFramework="net5.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\Work\GitHub\HuanlinLib\src\Huanlin.Common\bin\Debug\net5.0\Huanlin.Common.dll" target="lib\net5.0\Huanlin.Common.dll" />
+    <file src="D:\Work\GitHub\HuanlinLib\LICENSE.txt" target="LICENSE.txt" />
+  </files>
+</package>

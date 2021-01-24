@@ -8,6 +8,16 @@
     <RepositoryUrl>https://github.com/huanlin/HuanlinLib</RepositoryUrl>
     <PackageTags>utility</PackageTags>
     <RootNamespace>Huanlin.Common</RootNamespace>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>5.0.0</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project> 

@@ -8,10 +8,19 @@
     <RepositoryUrl>https://github.com/huanlin/HuanlinLib</RepositoryUrl>
     <PackageTags>utility</PackageTags>
     <RootNamespace>Huanlin.AppBlock</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   
   

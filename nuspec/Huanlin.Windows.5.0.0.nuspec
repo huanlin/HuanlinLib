@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Huanlin.Windows</id>
+    <version>1.0.0</version>
+    <authors>Huanlin.Windows</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework="net5.0-windows7.0">
+        <dependency id="Huanlin.Common" version="1.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Management" version="5.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net5.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WindowsForms" />
+      </group>
+    </frameworkReferences>
+  </metadata>
+  <files>
+    <file src="D:\Work\GitHub\HuanlinLib\src\Huanlin.Windows\bin\Debug\net5.0-windows\Huanlin.Windows.dll" target="lib\net5.0-windows7.0\Huanlin.Windows.dll" />
+    <file src="D:\Work\GitHub\HuanlinLib\LICENSE.txt" target="LICENSE.txt" />
+  </files>
+</package>
