@@ -6,6 +6,7 @@ namespace Huanlin.Http
 {
     public static class WebHelper
     {
+/*
         /// <summary>
         /// 傳回指定的 HTTP 請求的根虛擬路徑。
         /// </summary>
@@ -68,5 +69,6 @@ namespace Huanlin.Http
             HttpContext.Current.Response.BinaryWrite(buffer);
             HttpContext.Current.Response.End();
         }
+*/
     }
 }
