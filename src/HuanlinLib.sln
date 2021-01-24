@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30914.41
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0D0D85CA-8F1B-4E44-996D-02C294F01E60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huanlin.AppBlock", "Huanlin.AppBlock\Huanlin.AppBlock.csproj", "{C2D59BD4-0AEB-4C5C-8257-8E01762BD2B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Huanlin.AppBlock", "Huanlin.AppBlock\Huanlin.AppBlock.csproj", "{C2D59BD4-0AEB-4C5C-8257-8E01762BD2B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{1B5E7B86-F197-49F3-BCE9-11DEEE40BF3B}"
 EndProject

@@ -8,12 +8,6 @@ namespace Huanlin.Common.Helpers
 {
     public static class ReflectionHelper
     {
-        public static string GetAssemblyFullPath(Assembly asmb)
-        {
-            Uri codeBaseUri = new Uri(asmb.CodeBase);
-            return codeBaseUri.AbsolutePath;
-        }
-
         public static object GetProperty(object theObject, string propertyName)
         {
             var aType = theObject.GetType();

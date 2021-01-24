@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 using Huanlin.Collections;
@@ -9,6 +10,7 @@ using Huanlin.Common.Helpers;
 
 namespace Huanlin.AppBlock.Registration
 {
+	[SupportedOSPlatform("windows")]
 	public class UserRegCrypto
 	{
 		private string m_PublicKey;
@@ -173,7 +175,7 @@ namespace Huanlin.AppBlock.Registration
 
 			CspParameters cspParams = new CspParameters();
 			cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
-			RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(cspParams);
+			var rsa = new RSACryptoServiceProvider(cspParams);
 			rsa.FromXmlString(parts[0]);
 			bool valid = rsa.VerifyData(decryptedData, new SHA1CryptoServiceProvider(), signature.Bytes);
 

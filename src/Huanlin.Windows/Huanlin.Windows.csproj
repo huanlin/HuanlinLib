@@ -1,21 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TargetFramework>net5.0-windows</TargetFramework>
+	<UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\Debug\net452</OutputPath>
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj" />
+    <PackageReference Include="System.Management" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
+    <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj" />
   </ItemGroup>
 
 </Project> 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <Copyright>Michael Tsai</Copyright>
     <PackageProjectUrl>https://github.com/huanlin/HuanlinLib</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
@@ -9,17 +9,5 @@
     <PackageTags>utility</PackageTags>
     <RootNamespace>Huanlin.Common</RootNamespace>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Http\WebHelper.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
 
 </Project> 
