@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Huanlin.Common.Http
 {
+    /// <summary>
+    /// A simple HTTP client wrapper for downloading file with progress events.
+    /// Ref: https://github.com/txstudio/HttpClientDownloadWithProgressBar/blob/master/ConsoleApp/Program.cs
+    /// </summary>
     public class HttpDownloader
     {
         private readonly HttpClient _client;
