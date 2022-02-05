@@ -4,7 +4,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
 	<UseWindowsForms>true</UseWindowsForms>
 	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<Nullable>disable</Nullable>
 	<BaseOutputPath>..\..\output\$(MSBuildProjectName)</BaseOutputPath>
   </PropertyGroup>

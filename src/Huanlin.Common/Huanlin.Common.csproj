@@ -9,8 +9,9 @@
     <PackageTags>utility</PackageTags>
     <RootNamespace>Huanlin.Common</RootNamespace>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <BaseOutputPath>..\..\output\$(MSBuildProjectName)</BaseOutputPath>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
