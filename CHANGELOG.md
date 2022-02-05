@@ -6,9 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.1.0] - 2022-02-05
 
- - Upgraded to .NET 6.0.
+ - Upgrade to .NET 6.0.
  - Change build system from Nuke to FlubuCore.
  - Use MinVer package instead of GitVersion.
+ - Add AppVeyor for CI and auto publish NuGet packages to nuget.org.
 
 ## [5.0.0] - 2021-01-24
 
