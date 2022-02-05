@@ -7,15 +7,11 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryUrl>https://github.com/huanlin/HuanlinLib</RepositoryUrl>
     <PackageTags>utility</PackageTags>
-    <RootNamespace>Huanlin.AppBlock</RootNamespace>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>Huanlin.Common</RootNamespace>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <BaseOutputPath>..\..\output\$(MSBuildProjectName)</BaseOutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <BaseOutputPath>..\..\output\Huanlin.Common</BaseOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Huanlin.Common\Huanlin.Common.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE.txt">
@@ -24,12 +20,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MinVer" Version="2.5.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  
-  
-</Project>
+</Project> 

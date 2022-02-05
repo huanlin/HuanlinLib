@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Web;
 
-namespace Huanlin.Http
+namespace Huanlin.Common.Http
 {
     public static class WebHelper
     {

@@ -72,19 +72,19 @@ namespace Huanlin.Common.Cryptography
                     _Hash = new CRC32();
                     break;
                 case Provider.MD5:
-                    _Hash = new MD5CryptoServiceProvider();
+                    _Hash = MD5.Create();
                     break;
                 case Provider.SHA1:
-                    _Hash = new SHA1Managed();
+                    _Hash = SHA1.Create();
                     break;
                 case Provider.SHA256:
-                    _Hash = new SHA256Managed();
+                    _Hash = SHA256.Create();
                     break;
                 case Provider.SHA384:
-                    _Hash = new SHA384Managed();
+                    _Hash = SHA384.Create();
                     break;
                 case Provider.SHA512:
-                    _Hash = new SHA512Managed();
+                    _Hash = SHA512.Create();
                     break;
             }
         }

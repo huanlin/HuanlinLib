@@ -7,7 +7,7 @@ using Huanlin.Common.Helpers;
 /// HttpContentParser
 /// Reads an http data stream and returns the form parameters.
 /// </summary>
-namespace Huanlin.Http
+namespace Huanlin.Common.Http
 {
     public class HttpContentParser
     {

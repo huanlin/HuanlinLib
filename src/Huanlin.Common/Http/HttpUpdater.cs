@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Cache;
+using System.Net.Http;
+using System.Net.Http.Handlers;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Huanlin.Http
+namespace Huanlin.Common.Http
 {
     /*
         此類別可利用 HTTP 協定檢查以及下載應用程式的更新檔案。若其中有一個檔案下載失敗，就會整批 rollback（把先前下載的檔案刪除）。
@@ -36,7 +38,7 @@ namespace Huanlin.Http
           - FileUpdated
           - DownloadProgressChanged
 
-        Wrtiien by Huan-Lin Tsai. 2008-07-02. Updated 2018-12-13.
+        Wrtiien by Huan-Lin Tsai. 
     */
     public class HttpUpdater : IHttpUpdater
     {
@@ -53,13 +55,24 @@ namespace Huanlin.Http
         private const string ErrorServerUriEmpty = "尚未指定 ServerUri 屬性!";
         private const string ReadyToRollback = "更新檔案過程發生錯誤，準備嘗試回復檔案。";
 
+        private static HttpClient _httpClient;
+
         private string m_ClientPath;
         private string m_ServerUri;
         private string m_ChangeLogFileName;		// 應用程式的變更記錄檔名，若有指定，在進行更新時會自動下載此檔案.
         private List<UpdateItem> m_UpdateItems;
         private readonly object _lockObject = new object();
 
-        
+        static HttpUpdater()
+        {
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
+            };
+        }
+
+
         public HttpUpdater()
         {
             m_ClientPath = "";
@@ -220,163 +233,147 @@ namespace Huanlin.Http
 
             CleanUp();
 
-            WebClient myWebClient = new WebClient();
-            
-            try
+            // 取得 Update.txt 的內容
+            string contents = await _httpClient.GetStringAsync(m_ServerUri + UpdateFileName);
+
+            // Strip the "LF" from CR+LF and break it down by line
+            contents = contents.Replace("\n", "");
+            string[] fileList = contents.Split('\r');
+
+            StripComments(ref fileList);
+
+            string[] info;
+            string infoFilePath;
+            String infoParam;
+            List<string> fileNameList = new List<string>();
+
+            Version verRemote;  // 遠端檔案的版本
+            Version verLocal;   // 本地端檔案的版本
+            FileVersionInfo fileVerInfo;
+
+            m_UpdateItems.Clear();  // 清除更新項目清單
+
+            foreach (string file in fileList)
             {
-                // 取得 Update.txt 的內容
-                myWebClient.Encoding = Encoding.UTF8;
-                myWebClient.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore); // Do NOT use cache!
-                string contents = await myWebClient.DownloadStringTaskAsync(m_ServerUri + UpdateFileName);
+                info = file.Split(';');
+                infoFilePath = info[0].Trim();          // 從檔案清單項目中取出一個檔名（包含完整路徑）
 
-                // Strip the "LF" from CR+LF and break it down by line
-                contents = contents.Replace("\n", "");
-                string[] fileList = contents.Split('\r');
-
-                StripComments(ref fileList);
-
-                string[] info;
-                string infoFilePath;
-                String infoParam;
-                List<string> fileNameList = new List<string>();
-
-                Version verRemote;	// 遠端檔案的版本
-                Version verLocal;	// 本地端檔案的版本
-                FileVersionInfo fileVerInfo;
-
-                m_UpdateItems.Clear();	// 清除更新項目清單
-
-                foreach (string file in fileList)
+                if (String.IsNullOrEmpty(infoFilePath))
                 {
-                    info = file.Split(';');
-                    infoFilePath = info[0].Trim();			// 從檔案清單項目中取出一個檔名（包含完整路徑）
+                    continue;
+                }
 
-                    if (String.IsNullOrEmpty(infoFilePath))
+                if (m_ChangeLogFileName.Equals(infoFilePath, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    // 忽略變更記錄檔。
+                    continue;
+                }
+                if (info.Length > 1)
+                {
+                    infoParam = info[1].Trim().ToLower();   // 從檔案清單項目中取出欲對該檔案執行的動作參數
+                }
+                else
+                {
+                    infoParam = "?";    // 沒有指定分號，給預設值：用戶端沒有該檔案時才更新
+                }
+
+                // 去掉開頭的 '.' 和兩個反斜線 '\'。
+                while (infoFilePath[0] == '.' || infoFilePath[0] == '\\')
+                {
+                    infoFilePath = infoFilePath.Substring(1);
+                }
+
+                UpdateItem item = new UpdateItem();
+                item.FileName = infoFilePath;
+
+                // 忽略已經存在清單中（重複）的檔案
+                if (m_UpdateItems.Contains(item))
+                {
+                    continue;
+                }
+
+                // 根據指定的更新動作和參數調整 NeedDelete 和 NeedUpdate 旗號
+
+                string clientFileName = ClientPath + item.FileName;
+
+                bool fileExists = File.Exists(clientFileName);  // FileExistsAndNotEmpty(clientFileName);
+
+                item.Operation = UpdateAction.None;
+
+                if ((infoParam == "delete"))
+                {
+                    // The second parameter is "delete"
+                    if (fileExists)
                     {
-                        continue;
+                        item.Operation = UpdateAction.Delete;   // 刪除
                     }
-
-                    if (m_ChangeLogFileName.Equals(infoFilePath, StringComparison.CurrentCultureIgnoreCase))
+                }
+                else if ((infoParam == "?"))
+                {
+                    // The second parameter is "?" : 檢查檔案是否存在，若存在則不更新，不存在才更新
+                    if (!fileExists)
                     {
-                        // 忽略變更記錄檔。
-                        continue;
+                        item.Operation = UpdateAction.Overwrite;
                     }
-                    if (info.Length > 1)
+                }
+                else if (infoParam != string.Empty && (infoParam[0] == '=' && fileExists))
+                {
+                    // 第二個參數若以 '=' 字元開始，表示只有 local 跟遠端的檔案版本不同就要更新
+                    fileVerInfo = FileVersionInfo.GetVersionInfo(clientFileName);
+                    verRemote = new Version(infoParam.Substring(1, infoParam.Length - 1));
+                    verLocal = new Version(fileVerInfo.FileVersion.Split(' ')[0]);
+
+                    if (verRemote != verLocal)
                     {
-                        infoParam = info[1].Trim().ToLower();	// 從檔案清單項目中取出欲對該檔案執行的動作參數
+                        // 只要兩個版本不同就要更新
+                        item.Operation = UpdateAction.Overwrite;
                     }
-                    else
+                }
+                else
+                {
+                    // infoParam 指定的是版本編號
+
+                    if (fileExists)
                     {
-                        infoParam = "?";	// 沒有指定分號，給預設值：用戶端沒有該檔案時才更新
-                    }
-
-                    // 去掉開頭的 '.' 和兩個反斜線 '\'。
-                    while (infoFilePath[0] == '.' || infoFilePath[0] == '\\')
-                    {
-                        infoFilePath = infoFilePath.Substring(1);
-                    }
-
-                    UpdateItem item = new UpdateItem();
-                    item.FileName = infoFilePath;
-
-                    // 忽略已經存在清單中（重複）的檔案
-                    if (m_UpdateItems.Contains(item))
-                    {
-                        continue;
-                    }
-
-                    // 根據指定的更新動作和參數調整 NeedDelete 和 NeedUpdate 旗號
-
-                    string clientFileName = ClientPath + item.FileName;
-
-                    bool fileExists = File.Exists(clientFileName);	// FileExistsAndNotEmpty(clientFileName);
-
-                    item.Operation = UpdateAction.None;	
-
-                    if ((infoParam == "delete"))
-                    {
-                        // The second parameter is "delete"
-                        if (fileExists)
+                        // If 2nd parameter is empty, do nothing as file already exists
+                        if (infoParam != string.Empty)
                         {
-                            item.Operation = UpdateAction.Delete;	// 刪除
-                        }
-                    }
-                    else if ((infoParam == "?"))
-                    {
-                        // The second parameter is "?" : 檢查檔案是否存在，若存在則不更新，不存在才更新
-                        if (!fileExists)
-                        {
-                            item.Operation = UpdateAction.Overwrite;
-                        }
-                    }
-                    else if (infoParam != string.Empty && (infoParam[0] == '=' && fileExists))
-                    {
-                        // 第二個參數若以 '=' 字元開始，表示只有 local 跟遠端的檔案版本不同就要更新
-                        fileVerInfo = FileVersionInfo.GetVersionInfo(clientFileName);
-                        verRemote = new Version(infoParam.Substring(1, infoParam.Length - 1));
-                        verLocal = new Version(fileVerInfo.FileVersion.Split(' ')[0]);
+                            // Check the version of local and remote files
+                            fileVerInfo = FileVersionInfo.GetVersionInfo(clientFileName);
 
-                        if (verRemote != verLocal)
-                        {
-                            // 只要兩個版本不同就要更新
-                            item.Operation = UpdateAction.Overwrite;
-                        }
-                    }
-                    else
-                    {
-                        // infoParam 指定的是版本編號
-
-                        if (fileExists)
-                        {
-                            // If 2nd parameter is empty, do nothing as file already exists
-                            if (infoParam != string.Empty)
+                            if (fileVerInfo.FileVersion == null)
                             {
-                                // Check the version of local and remote files
-                                fileVerInfo = FileVersionInfo.GetVersionInfo(clientFileName);
+                                // 用戶端有這個檔案，可是沒有版本編號
+                                item.Operation = UpdateAction.Overwrite;
+                            }
+                            else
+                            {
+                                // 比對兩邊的版本編號
+                                verRemote = new Version(infoParam);
+                                verLocal = new Version(fileVerInfo.FileVersion.Split(' ')[0]);
 
-                                if (fileVerInfo.FileVersion == null)
+                                if (verRemote > verLocal)
                                 {
-                                    // 用戶端有這個檔案，可是沒有版本編號
                                     item.Operation = UpdateAction.Overwrite;
-                                }
-                                else
-                                {
-                                    // 比對兩邊的版本編號
-                                    verRemote = new Version(infoParam);
-                                    verLocal = new Version(fileVerInfo.FileVersion.Split(' ')[0]);
-
-                                    if (verRemote > verLocal)
-                                    {
-                                        item.Operation = UpdateAction.Overwrite;
-                                    }									
                                 }
                             }
                         }
-                        else
-                        {
-                            // 用戶端沒有這個檔案，所以需要更新。
-                            item.Operation = UpdateAction.Overwrite;
-                        }
-                    } 
-
-                    // 若有需要更新才加入更新項目清單.
-                    if (item.Operation != UpdateAction.None)
+                    }
+                    else
                     {
-                        m_UpdateItems.Add(item);
-                        // Logger.Debug("找到需要更新的檔案： {@Item}", item);
+                        // 用戶端沒有這個檔案，所以需要更新。
+                        item.Operation = UpdateAction.Overwrite;
                     }
                 }
-                //Logger.Debug($"完成獲取更新檔案清單，共 {m_UpdateItems.Count} 個更新項目。");
+
+                // 若有需要更新才加入更新項目清單.
+                if (item.Operation != UpdateAction.None)
+                {
+                    m_UpdateItems.Add(item);
+                    // Logger.Debug("找到需要更新的檔案： {@Item}", item);
+                }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"錯誤：{ex.ToString()}");
-                throw;
-            }
-            finally
-            {
-                myWebClient.Dispose();                
-            }		
+            //Logger.Debug($"完成獲取更新檔案清單，共 {m_UpdateItems.Count} 個更新項目。");
         }
 
         public bool HasUpdates()
@@ -388,20 +385,20 @@ namespace Huanlin.Http
         /// 執行線上更新。
         /// </summary>
         /// <returns>已更新的檔案數量（包含刪除的檔案）。/// </returns>
-        public async Task<int> UpdateAsync() 
+        public async Task<int> UpdateAsync()
         {
             if (!HasUpdates())
             {
                 return 0;
             }
 
-            CleanUp();            
+            CleanUp();
 
             // 加入預設的變更記錄檔名.
-            if (!String.IsNullOrEmpty(m_ChangeLogFileName)) 
+            if (!String.IsNullOrEmpty(m_ChangeLogFileName))
             {
                 UpdateItem updItem = new UpdateItem(m_ChangeLogFileName, UpdateAction.Overwrite);
-                if (!m_UpdateItems.Contains(updItem)) 
+                if (!m_UpdateItems.Contains(updItem))
                 {
                     m_UpdateItems.Add(updItem);
                 }
@@ -412,11 +409,7 @@ namespace Huanlin.Http
             // execute the following line even for check runs
             List<RollbackItem> rollBackList = new List<RollbackItem>();
 
-            WebClient myWebClient = new WebClient();
-
-            // 訂閱事件
-            myWebClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-            myWebClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+            var httpDownloader = new HttpDownloader(OnDownloadProgress, noCache: true);
 
             try
             {
@@ -436,7 +429,7 @@ namespace Huanlin.Http
                     }
 
                     // 開始執行更新作業
-                    var updEvtArgs = new HttpUpdaterFileEventArgs(item.FileName, updCount+1, m_UpdateItems.Count);
+                    var updEvtArgs = new HttpUpdaterFileEventArgs(item.FileName, updCount + 1, m_UpdateItems.Count);
                     OnFileUpdating(updEvtArgs);
 
                     RollbackItem rollBackItem;
@@ -446,7 +439,7 @@ namespace Huanlin.Http
                             // Logger.Debug($"正在下載檔案，來源: {serverFileUrl}，目的： {tempFileName}");
 
                             // 1.下載檔案並存成暫時檔名
-                            await myWebClient.DownloadFileTaskAsync(new Uri(serverFileUrl), tempFileName);
+                            await httpDownloader.DownloadAsync(new Uri(serverFileUrl), tempFileName);
 
                             if (!FileExistsAndNotEmpty(tempFileName))	// 檢查檔案下載是否成功
                             {
@@ -502,7 +495,7 @@ namespace Huanlin.Http
                 // Rollback 
                 RollbackItem rollback;
 
-                for (int i = rollBackList.Count-1; i >= 0; i--)
+                for (int i = rollBackList.Count - 1; i >= 0; i--)
                 {
                     rollback = rollBackList[i];
                     if (rollback.Operation == RollbackAction.Rename)
@@ -522,22 +515,13 @@ namespace Huanlin.Http
             }
             finally
             {
-                // 解除訂閱 WebClient 事件
-                myWebClient.DownloadProgressChanged -= WebClient_DownloadProgressChanged;
-                myWebClient.DownloadFileCompleted -= WebClient_DownloadFileCompleted;
-
-                myWebClient.Dispose();
                 rollBackList.Clear();
             }
         }
 
-        void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private void OnDownloadProgress(object sender, HttpProgressEventArgs e)
         {
-            // Nothing to do here, yet.
-        }
-
-        private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
+            //Console.WriteLine($"{e.ProgressPercentage}% {e.BytesTransferred} of {e.TotalBytes}");
             if (DownloadProgressChanged != null)
             {
                 DownloadProgressChanged(sender, e);
@@ -554,9 +538,9 @@ namespace Huanlin.Http
         public string ClientPath
         {
             get { return m_ClientPath; }
-            set 
-            { 
-                if (String.IsNullOrEmpty(value)) 
+            set
+            {
+                if (String.IsNullOrEmpty(value))
                 {
                     throw new InvalidOperationException(ErrorClientPathEmpty);
                 }
@@ -571,7 +555,7 @@ namespace Huanlin.Http
         public string ServerUri
         {
             get { return m_ServerUri; }
-            set 
+            set
             {
                 if (String.IsNullOrEmpty(value))
                 {
@@ -599,7 +583,7 @@ namespace Huanlin.Http
 
         public event EventHandler<HttpUpdaterFileEventArgs> FileUpdated;
 
-        public event DownloadProgressChangedEventHandler DownloadProgressChanged;
+        public event EventHandler<HttpProgressEventArgs> DownloadProgressChanged;
 
         #endregion
 

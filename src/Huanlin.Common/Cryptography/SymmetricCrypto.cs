@@ -45,16 +45,16 @@ namespace Huanlin.Common.Cryptography
             switch (provider)
             {
                 case Provider.DES:
-                    m_SymmAlgorithm = new DESCryptoServiceProvider();
+                    m_SymmAlgorithm = DES.Create();
                     break;
                 case Provider.RC2:
-                    m_SymmAlgorithm = new RC2CryptoServiceProvider();
+                    m_SymmAlgorithm = RC2.Create();
                     break;
                 case Provider.Rijndael:
-                    m_SymmAlgorithm = new RijndaelManaged();
+                    m_SymmAlgorithm = Aes.Create();
                     break;
                 case Provider.TripleDES:
-                    m_SymmAlgorithm = new TripleDESCryptoServiceProvider();
+                    m_SymmAlgorithm = TripleDES.Create();
                     break;
             }
 

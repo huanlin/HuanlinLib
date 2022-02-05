@@ -50,8 +50,8 @@ namespace Huanlin.AppBlock.Registration
 			string signature = HashAndSign(data, m_PrivateKey);
 
 			ByteArray signatureData = new ByteArray(Convert.FromBase64String(signature));
-			rsa.FromXmlString(m_PublicKey);
-			bool ok = rsa.VerifyData(Encoding.Default.GetBytes(data), new SHA1CryptoServiceProvider(), signatureData.Bytes);
+			rsa.FromXmlString(m_PublicKey);			
+			bool ok = rsa.VerifyData(Encoding.Default.GetBytes(data), SHA1.Create(), signatureData.Bytes);
 			if (ok)
 			{
 				// 傳回公鑰、簽章、密文（包括密鑰、初始化向量、密文資料）。
@@ -100,7 +100,7 @@ namespace Huanlin.AppBlock.Registration
 			rsa.FromXmlString(privateKey);
 
 			byte[] orgData = Encoding.Default.GetBytes(data);
-			byte[] signature = rsa.SignData(orgData, new SHA1CryptoServiceProvider());
+			byte[] signature = rsa.SignData(orgData, SHA1.Create());
 
 			return Convert.ToBase64String(signature);
 		}
@@ -177,7 +177,7 @@ namespace Huanlin.AppBlock.Registration
 			cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
 			var rsa = new RSACryptoServiceProvider(cspParams);
 			rsa.FromXmlString(parts[0]);
-			bool valid = rsa.VerifyData(decryptedData, new SHA1CryptoServiceProvider(), signature.Bytes);
+			bool valid = rsa.VerifyData(decryptedData, SHA1.Create(), signature.Bytes);
 
 			if (!valid)
 			{
