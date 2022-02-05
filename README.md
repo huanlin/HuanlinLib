@@ -2,6 +2,12 @@
 
 # HuanlinLib
 
+包含三個套件：
+
+- [Huanlin.Common](https://www.nuget.org/packages/Huanlin.Common/)
+- [Huanlin.Windows](https://www.nuget.org/packages/Huanlin.Windows/)
+- [Huanlin.AppBlock](https://www.nuget.org/packages/Huanlin.AppBlock/)
+
 最近一次的主要更新：
 
 - 升級至 .NET 6。
