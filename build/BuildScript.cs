@@ -11,7 +11,7 @@ namespace Build
         [ProductId]
         public string ProductId { get; set; } = "HuanlinLib";
 
-        // 指定 .sln 檔案。這裡加上了 "source/"，是因為我把建置專案放在 repository 的跟目錄。
+        // 指定 .sln 檔案。這裡加上了 "source/"，是因為我把建置專案放在 repository 的根目錄。
         [SolutionFileName]
         public string SolutionFileName => RootDirectory.CombineWith("src/HuanlinLib.sln");
 
