@@ -10,26 +10,25 @@ namespace Test.Huanlin
     ///to contain all Huanlin.Common.Helpers.CharHelper Unit Tests
     ///</summary>
     [TestFixture]
-	public class CharHelperTest
-	{
-		/// <summary>
-		///A test for FullShapeToAsciiDigit (char)
-		///</summary>
-		[Test]
-		public void FullShapeToAsciiDigitTest()
-		{
-			char ch = '０'; 
-			char expected = '0';
-			char actual = CharHelper.FullShapeToAsciiDigit(ch);
-            Assert.AreEqual(expected, actual, "Huanlin.Text.CharHelper.FullShapeToAsciiDigit 測試失敗: " + ch.ToString());
+    public class CharHelperTest
+    {
+        /// <summary>
+        ///A test for FullShapeToAsciiDigit (char)
+        ///</summary>
+        [Test]
+        public void FullShapeToAsciiDigitTest()
+        {
+            char ch = '０';
+            char expected = '0';
+            char actual = CharHelper.FullShapeToAsciiDigit(ch);
+            Assert.That(actual, Is.EqualTo(expected), "Huanlin.Text.CharHelper.FullShapeToAsciiDigit 測試失敗: " + ch.ToString());
 
-			ch = '９';
-			expected = '9';
-			actual = CharHelper.FullShapeToAsciiDigit(ch);
-            Assert.AreEqual(expected, actual, "Huanlin.Text.CharHelper.FullShapeToAsciiDigit 測試失敗: " + ch.ToString());
-		}
-
-	}
+            ch = '９';
+            expected = '9';
+            actual = CharHelper.FullShapeToAsciiDigit(ch);
+            Assert.That(actual, Is.EqualTo(expected), "Huanlin.Text.CharHelper.FullShapeToAsciiDigit 測試失敗: " + ch.ToString());
+        }
+    }
 
 
 }
