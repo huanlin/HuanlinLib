@@ -42,13 +42,13 @@ jobs:
       run: dotnet restore src/HuanlinLib.sln
     
     - name: Build
-      run: dotnet build src/HuanlinLib.sln --configuration Release --no-restore
+      run: dotnet build src/HuanlinLib.sln --configuration Release --no-restore /p:Version=${{ steps.get_version.outputs.VERSION }}
     
     - name: Test
       run: dotnet test tests/Test.Huanlin/Test.Huanlin.csproj --no-build --configuration Release --verbosity normal
     
     - name: Package
-      run: dotnet pack src/HuanlinLib.sln --configuration Release --no-build --output ./artifacts
+      run: dotnet pack src/HuanlinLib.sln --configuration Release --no-build --output ./artifacts /p:Version=${{ steps.get_version.outputs.VERSION }}
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
