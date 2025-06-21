@@ -1,11 +1,13 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/5qv789s4aar9cpt7?svg=true)](https://ci.appveyor.com/project/huanlin/huanlinlib)
+[![Build and Publish](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml)
 
 # HuanlinLib
 
-包含三個套件：
+包含 2 個套件：
 
-- [Huanlin.Common](https://www.nuget.org/packages/Huanlin.Common/)
-- [Huanlin.Windows](https://www.nuget.org/packages/Huanlin.Windows/)
+- [![NuGet Version](https://img.shields.io/nuget/v/Huanlin.Common.svg)](https://www.nuget.org/packages/Huanlin.Common/)
+  [Huanlin.Common](https://www.nuget.org/packages/Huanlin.Common/)
+- [![NuGet Version](https://img.shields.io/nuget/v/Huanlin.Windows.svg)](https://www.nuget.org/packages/Huanlin.Windows/)
+  [Huanlin.Windows](https://www.nuget.org/packages/Huanlin.Windows/)
 
 最近一次的主要更新：
 
