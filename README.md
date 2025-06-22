@@ -2,11 +2,13 @@
 
 # HuanlinLib
 
-[![Huanlin.Common](https://img.shields.io/nuget/v/Huanlin.Common.svg)](https://www.nuget.org/packages/Huanlin.Common/)
-[![Huanlin.Windows](https://img.shields.io/nuget/v/Huanlin.Windows.svg)](https://www.nuget.org/packages/Huanlin.Windows/) 
+| Package | Current release |
+|---------|-------|
+| Huanlin.Common | [![Huanlin.Common](https://img.shields.io/nuget/v/Huanlin.Common.svg)](https://www.nuget.org/packages/Huanlin.Common/) |
+| Huanlin.Windows | [![Huanlin.Windows](https://img.shields.io/nuget/v/Huanlin.Windows.svg)](https://www.nuget.org/packages/Huanlin.Windows/) |
 
-³Ìªñ¤@¦¸ªº¥D­n§ó·s¡G
+æœ€è¿‘ä¸€æ¬¡çš„ä¸»è¦æ›´æ–°ï¼š
 
-- ¤É¯Å¦Ü .NET 9¡C
+- å‡ç´šè‡³ .NET 9ã€‚
 
-±ı¬d¬İ¸Ô²Ó­×§ï¬ö¿ı¡A½Ğ°Ñ¦Ò [CHANGELOG.md](CHANGELOG.md)¡C
+æ¬²æŸ¥çœ‹è©³ç´°ä¿®æ”¹ç´€éŒ„ï¼Œè«‹åƒè€ƒ [CHANGELOG.md](CHANGELOG.md)ã€‚
