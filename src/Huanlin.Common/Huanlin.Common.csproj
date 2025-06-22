@@ -12,12 +12,17 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<BaseOutputPath>..\..\output\$(MSBuildProjectName)</BaseOutputPath>
 		<Nullable>disable</Nullable>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="..\..\LICENSE.txt">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 
