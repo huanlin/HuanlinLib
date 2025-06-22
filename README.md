@@ -1,12 +1,9 @@
 [![Build and Publish](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml)
-[![NuGet](https://img.shields.io/nuget/v/NChinese.svg)](https://www.nuget.org/packages/NChinese/) 
 
 # HuanlinLib
 
-包含 2 個套件：
-
-- [Huanlin.Common](https://www.nuget.org/packages/Huanlin.Common/)
-- [Huanlin.Windows](https://www.nuget.org/packages/Huanlin.Windows/)
+[![Huanlin.Common](https://img.shields.io/nuget/v/Huanlin.Common.svg)](https://www.nuget.org/packages/Huanlin.Common/)
+[![Huanlin.Windows](https://img.shields.io/nuget/v/Huanlin.Windows.svg)](https://www.nuget.org/packages/Huanlin.Windows/) 
 
 最近一次的主要更新：
 

@@ -12,9 +12,6 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<BaseOutputPath>..\..\output\$(MSBuildProjectName)</BaseOutputPath>
 		<Nullable>disable</Nullable>
-		<!-- MinVer configuration -->
-		<MinVerTagPrefix>v</MinVerTagPrefix>
-		<MinVerDefaultPreReleaseIdentifiers>preview</MinVerDefaultPreReleaseIdentifiers>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -7,9 +7,6 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<Nullable>disable</Nullable>
 		<BaseOutputPath>..\..\output\$(MSBuildProjectName)</BaseOutputPath>
-		<!-- MinVer configuration -->
-		<MinVerTagPrefix>v</MinVerTagPrefix>
-		<MinVerDefaultPreReleaseIdentifiers>preview</MinVerDefaultPreReleaseIdentifiers>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
