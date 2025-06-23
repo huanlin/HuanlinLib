@@ -1,4 +1,4 @@
-﻿[![Build and Publish](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml)
+﻿[![Build status](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/huanlin/HuanlinLib/actions/workflows/build-and-publish.yml)
 
 # HuanlinLib
 
