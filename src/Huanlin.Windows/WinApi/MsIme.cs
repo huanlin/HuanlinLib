@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -10,8 +10,8 @@ using System.Runtime.CompilerServices;
  * Date:   2009-3-30
  * Reference: http://www.microsoft.com/downloads/en/details.aspx?FamilyID=FE8A149B-D9ED-45B1-9D99-61BB462AA4A3&displaylang=en
  */
-namespace Huanlin.Windows.WinApi
-{
+namespace Huanlin.Windows.WinApi;
+
 	public static class Constants
 	{
 		public const string IID_IFELanguage = "019F7152-E6DB-11D0-83C3-00C04FDDB82E";
@@ -175,4 +175,3 @@ namespace Huanlin.Windows.WinApi
 #endif
 
 	// TODO: Managed version of WDD struct (Do we really need it?)
-}

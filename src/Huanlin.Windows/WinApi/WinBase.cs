@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 
-namespace Huanlin.Windows.WinApi
-{
-	public static class WinBase
-	{
-		const int S_OK = 0x00000000;
+namespace Huanlin.Windows.WinApi;
 
-		public static void CheckError(int errorCode)
+public static class WinBase
+{
+	const int S_OK = 0x00000000;
+
+	public static void CheckError(int errorCode)
+	{
+		if (errorCode != S_OK)
 		{
-			if (errorCode != S_OK)
-			{
-				throw new Win32Exception(errorCode);
-			}
+			throw new Win32Exception(errorCode);
 		}
 	}
 }

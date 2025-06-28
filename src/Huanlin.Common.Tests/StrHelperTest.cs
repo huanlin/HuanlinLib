@@ -3,62 +3,59 @@
 using Huanlin.Common.Helpers;
 using NUnit.Framework;
 
-namespace Huanlin.Common.Tests
+namespace Huanlin.Common.Tests;
+
+/// <summary>
+///This is a test class for Huanlin.Common.Helpers.StrHelper and is intended
+///to contain all Huanlin.Common.Helpers.StrHelper Unit Tests
+///</summary>
+[TestFixture]
+public class StrHelperTest
 {
     /// <summary>
-    ///This is a test class for Huanlin.Common.Helpers.StrHelper and is intended
-    ///to contain all Huanlin.Common.Helpers.StrHelper Unit Tests
+    ///A test for IsEmpty (string)
     ///</summary>
-    [TestFixture]
-    public class StrHelperTest
+    [Test]
+    public void IsEmptyTest()
     {
-        /// <summary>
-        ///A test for IsEmpty (string)
-        ///</summary>
-        [Test]
-        public void IsEmptyTest()
-        {
-            string input = " \t　\r\n";
+        string input = " \t　\r\n";
 
-            bool expected = true;
-            bool actual = StrHelper.IsEmpty(input);
+        bool expected = true;
+        bool actual = StrHelper.IsEmpty(input);
 
-            Assert.That(actual, Is.EqualTo(expected), "global::Huanlin.Text.StrHelper.IsEmpty did not return the expected value.");
-        }
-
-        /// <summary>
-        ///A test for RemoveSpaces (string, bool)
-        ///</summary>
-        [Test]
-        public void RemoveSpacesTest()
-        {
-            string input = "a b　c";
-            bool fullShapeSpaces = true;
-
-            string expected = "abc";
-            string actual;
-
-            actual = StrHelper.RemoveSpaces(input, fullShapeSpaces);
-
-            Assert.That(actual, Is.EqualTo(expected), "global::Huanlin.Text.StrHelper.RemoveSpaces did not return the expected value.");
-        }
-
-        /// <summary>
-        ///A test for FullShapeSpaceToSpace (string)
-        ///</summary>
-        [Test]
-        public void FullShapeSpaceToSpaceTest()
-        {
-            string input = "a　b";
-
-            string expected = "a b";
-            string actual;
-
-            actual = StrHelper.FullShapeSpaceToSpace(input);
-
-            Assert.That(actual, Is.EqualTo(expected), "global::Huanlin.Text.StrHelper.FullShapeSpaceToSpace did not return the expected value.");
-        }
+        Assert.That(actual, Is.EqualTo(expected), "global::Huanlin.Text.StrHelper.IsEmpty did not return the expected value.");
     }
 
+    /// <summary>
+    ///A test for RemoveSpaces (string, bool)
+    ///</summary>
+    [Test]
+    public void RemoveSpacesTest()
+    {
+        string input = "a b　c";
+        bool fullShapeSpaces = true;
 
+        string expected = "abc";
+        string actual;
+
+        actual = StrHelper.RemoveSpaces(input, fullShapeSpaces);
+
+        Assert.That(actual, Is.EqualTo(expected), "global::Huanlin.Text.StrHelper.RemoveSpaces did not return the expected value.");
+    }
+
+    /// <summary>
+    ///A test for FullShapeSpaceToSpace (string)
+    ///</summary>
+    [Test]
+    public void FullShapeSpaceToSpaceTest()
+    {
+        string input = "a　b";
+
+        string expected = "a b";
+        string actual;
+
+        actual = StrHelper.FullShapeSpaceToSpace(input);
+
+        Assert.That(actual, Is.EqualTo(expected), "global::Huanlin.Text.StrHelper.FullShapeSpaceToSpace did not return the expected value.");
+    }
 }
