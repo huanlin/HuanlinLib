@@ -2,7 +2,9 @@ name: Build and Publish
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: 
+      - main
+      - develop
     tags:
       - '*.*.*'
   pull_request:
@@ -26,31 +28,20 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
-    - name: Extract version from git tag
-      id: get_version
-      shell: pwsh
-      run: |
-        if ($env:GITHUB_REF -match 'refs/tags/(.+)') {
-          $version = $matches[1]
-          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
-          echo "Creating release for version $version"
-        } else {
-          echo "VERSION=0.0.0" >> $env:GITHUB_OUTPUT
-          echo "No version tag found, using 0.0.0"
-        }    
+    
     - name: Restore dependencies
       run: dotnet restore src/HuanlinLib.sln
     
     - name: Build
-      run: dotnet build src/HuanlinLib.sln --configuration Release --no-restore /p:Version=${{ steps.get_version.outputs.VERSION }}
+      run: dotnet build src/HuanlinLib.sln --configuration Release --no-restore
     
     - name: Test
       run: dotnet test src/Huanlin.Common.Tests/Huanlin.Common.Tests.csproj --no-build --configuration Release --verbosity normal
     
     - name: Package
       run: |
-        dotnet pack src/Huanlin.Common/Huanlin.Common.csproj --configuration Release --no-build --output ./artifacts /p:Version=${{ steps.get_version.outputs.VERSION }}
-        dotnet pack src/Huanlin.Windows/Huanlin.Windows.csproj --configuration Release --no-build --output ./artifacts /p:Version=${{ steps.get_version.outputs.VERSION }}
+        dotnet pack src/Huanlin.Common/Huanlin.Common.csproj --configuration Release --no-build --output ./artifacts
+        dotnet pack src/Huanlin.Windows/Huanlin.Windows.csproj --configuration Release --no-build --output ./artifacts
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
