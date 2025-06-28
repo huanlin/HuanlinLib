@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenPhoneticData", "GenPhoneticData\GenPhoneticData.csproj", "{CBCCDE56-A88A-47D8-8442-6E36DD7B9B7C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSearchSpeed", "DemoSearchSpeed\DemoSearchSpeed.csproj", "{98FA8E11-91CD-456C-A8A0-1B4A7511806A}"
@@ -22,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {07FF4305-65E1-4C24-884F-01D8A5BC5398}
 	EndGlobalSection
 EndGlobal

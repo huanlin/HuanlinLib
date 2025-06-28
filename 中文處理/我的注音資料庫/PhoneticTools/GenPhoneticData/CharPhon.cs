@@ -10,15 +10,12 @@ namespace GenPhoneticData
     /// </summary>
     public class CharPhon
     {
-        private string theChar;     // 記住：Unicode 字元必須以 string 儲存，不可用 char !! (搜尋: surrogate pairs)
-        private List<string> phonetics; // 注音字根串列
-        private int freqCode;   // 使用頻率代碼：0/1/2 = 常用/次常用/罕用。
+        private string theChar = string.Empty;     // 記住：Unicode 字元必須以 string 儲存，不可用 char !! (搜尋: surrogate pairs)
+        private List<string> phonetics = new List<string>(); // 注音字根串列
+        private int freqCode = 0;   // 使用頻率代碼：0/1/2 = 常用/次常用/罕用。
 
         public CharPhon() 
         {
-            theChar = "";
-            phonetics = new List<string>();
-            int freqCode = 0;
         }
 
         public string Character 
