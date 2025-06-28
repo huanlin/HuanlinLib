@@ -1,11 +1,11 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Huanlin.Common.Helpers
 {
 	/// <summary>
-	/// ¤é´Á®É¶¡¤u¨ã¨ç¦¡¡C
+	/// æ—¥æœŸæ™‚é–“å·¥å…·å‡½å¼ã€‚
 	/// </summary>
 	public static class DateHelper
 	{

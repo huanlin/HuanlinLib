@@ -1,4 +1,4 @@
-
+﻿
 namespace Huanlin.Common.Helpers
 {
 	/// <summary>

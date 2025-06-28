@@ -1,4 +1,4 @@
-
+﻿
 namespace Huanlin.Windows.Forms
 {
 	public enum WindowsMessages: int

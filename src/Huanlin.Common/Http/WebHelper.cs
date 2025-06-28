@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Text;
 using System.Web;
 
@@ -8,7 +8,7 @@ namespace Huanlin.Common.Http
     {
 /*
         /// <summary>
-        /// ¶Ç¦^«ü©wªº HTTP ½Ğ¨Dªº®ÚµêÀÀ¸ô®|¡C
+        /// å‚³å›æŒ‡å®šçš„ HTTP è«‹æ±‚çš„æ ¹è™›æ“¬è·¯å¾‘ã€‚
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
@@ -25,10 +25,10 @@ namespace Huanlin.Common.Http
 		}
 
 		/// <summary>
-		/// ¨ú±o¥Î¤áºİªº IP ¦ì§}¡C
+		/// å–å¾—ç”¨æˆ¶ç«¯çš„ IP ä½å€ã€‚
 		/// </summary>
-		/// <param name="req">Request ª«¥ó¡C</param>
-		/// <param name="detectProxy">¬O§_°»´ú proxy¡C</param>
+		/// <param name="req">Request ç‰©ä»¶ã€‚</param>
+		/// <param name="detectProxy">æ˜¯å¦åµæ¸¬ proxyã€‚</param>
 		/// <returns></returns>
 		public static string GetClientIPAddress(HttpRequest req, bool detectProxy)
 		{
@@ -51,10 +51,10 @@ namespace Huanlin.Common.Http
 		}
 
         /// <summary>
-        /// ³z¹L HTTP ±q»·ºİ¾÷¾¹¤U¸üÀÉ®×¡C
+        /// é€é HTTP å¾é ç«¯æ©Ÿå™¨ä¸‹è¼‰æª”æ¡ˆã€‚
         /// </summary>
-        /// <param name="url">»·ºİ URL¡C</param>
-        /// <param name="fileName">¤£¥]§t¸ô®|ªºÀÉ®×¦WºÙ¡]¥Î¤áºİ¤U¸üÀÉ®×®É¬İ¨ìªºÀÉ¦W¡^¡C</param>
+        /// <param name="url">é ç«¯ URLã€‚</param>
+        /// <param name="fileName">ä¸åŒ…å«è·¯å¾‘çš„æª”æ¡ˆåç¨±ï¼ˆç”¨æˆ¶ç«¯ä¸‹è¼‰æª”æ¡ˆæ™‚çœ‹åˆ°çš„æª”åï¼‰ã€‚</param>
         public static void RemoteDownloadFile(string url, string fileName)
         {
             System.Net.WebClient wc = new System.Net.WebClient();

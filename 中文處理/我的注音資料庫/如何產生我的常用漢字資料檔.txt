@@ -1,71 +1,71 @@
-�ڪ��`�κ~�r�����
+﻿我的常用漢字資料檔
 
-  �ɮ׻���
+  檔案說明
   
-    - �~�r�`����Ӫ�.txt �G�]�t�]�X�G�^�Ҧ��~�r���`������ɡC
-    - �h���r-�`��.txt �G�`�Ϊ��h���r�A�u������r�A���t�`���r�ڡA�Ω����{�����t�P�_�C
-    - �h���r-����.txt �G�������h���r�A�u������r�A���t�`���r�ڡA�Ω����{�����t�P�_�C
+    - 漢字注音對照表.txt ：包含（幾乎）所有漢字的注音資料檔。
+    - 多音字-常用.txt ：常用的多音字，只有中文字，不含注音字根，用於讓程式迅速判斷。
+    - 多音字-全部.txt ：全部的多音字，只有中文字，不含注音字根，用於讓程式迅速判斷。
 
-�ɮפ��e�榡
+檔案內容格式
 
-  �C�@�C�@�Ӻ~�r�A�䤤�]�t�r���B�ϥ��W�v�B�H�Ϊ`���r�ڡ]�@�Φh�ӡ^����T�C�U���ΪŮ���}�A�榡�p�U�G
+  每一列一個漢字，其中包含字元、使用頻率、以及注音字根（一或多個）等資訊。各欄位用空格分開，格式如下：
   
-    �r�� �W�v�N�X �`���r��1 �`���r��2
+    字元 頻率代碼 注音字根1 注音字根2
 
-  �p�G�}�Y�r���O�b�Τ����]';'�^�A�N���ӦC�O���ѡA�{���B�z�ɶ����L�C
+  如果開頭字元是半形分號（';'），代表該列是註解，程式處理時須略過。
   
-  �W�v�N�X�� 0�B1�B�� 2�A�U�N�����P���ϥ��W�v�G
+  頻率代碼為 0、1、或 2，各代表不同的使用頻率：
   
-    0: �`�ΡC
-    1: ���`�ΡC
-    2: �u�ΡC
+    0: 常用。
+    1: 次常用。
+    2: 罕用。
 
-  �Ϥ��T�Ū��D�n��]�b��į�Ҷq�C���{���ݭn�Ϭd�`���r�ڮɡA�̱`�Ϊ��~�r�A�d���W�v���ӷ|�V���A�ۤϪ��A�u�Φr�h�ܤָI��C�p�G�C���d�ߪ`���r�ڮɡA���짹��~�r����ɤ��j�M�A�N�|���O�ܦh�ɶ��b���u�Φr�C
-  �]�N�O���A�{���bŪ���u�~�r�`����Ӫ�.txt�v�ɡA�|�ھ��ɮפ��e���C�Ӻ~�r�Хܪ��u�W�v�N�X�v���O���T�Ӧ�C�]�� Hashtable�^���C
+  區分三級的主要原因在於效能考量。當程式需要反查注音字根時，最常用的漢字，查詢頻率應該會越高，相反的，罕用字則很少碰到。如果每次查詢注音字根時，都到完整漢字資料檔中搜尋，就會浪費很多時間在比對罕用字。
+  也就是說，程式在讀取「漢字注音對照表.txt」時，會根據檔案內容中每個漢字標示的「頻率代碼」分別放到三個串列（或 Hashtable）中。
   
-  �`���r�ڪ������A�ä��O�κ~�r���t�u�v�w�A�ӬO�H�з���L�����A�Ҧp�u�q�v�o�Ӧr�A�䤺�e�|�O�G
+  注音字根的部分，並不是用漢字的ㄅㄆㄇㄈ，而是以標準鍵盤對應，例如「量」這個字，其內容會是：
   
-    �q 0 xu;4 xu;6
+    量 0 xu;4 xu;6
 
-�p�󲣥͡u�~�r�`����Ӫ�.txt�v
+如何產生「漢字注音對照表.txt」
   
-  ���ͺ~�r�`����Ӫ��ɡA�ݭn�U�C�ɮװ������R����ƨӷ��G
+  產生漢字注音對照表時，需要下列檔案做為分析的資料來源：
 
-  A. �s�ŭ����`������ɡ]UTF-8 �����^�A�ɦW�O: phone.cin�C
-  B. �`�κ~�r2500 (�c��).txt�C
-  C. �@�ž\Ū�r��.txt�C
-  D. ���`�Φr1000 (�c��).txt�C�`�N�G���ɮ��٥����[�J�Ҧ��`���Ÿ��MŪ���C
+  A. 新酷音的注音資料檔（UTF-8 版本），檔名是: phone.cin。
+  B. 常用漢字2500 (繁體).txt。
+  C. 一級閱讀字表.txt。
+  D. 次常用字1000 (繁體).txt。注意：此檔案還必須加入所有注音符號和讀音。
 
-  �s�ŭ��� phone.cin �ɮ׮榡�򥻤W�O�H�`���r�ڪ���L�X�ӱƧǡA�C�@�C�N�O�@����L�X�ҹ���������r�C
-  �b�ϥε{�����ͺ~�r�`����Ӫ����e�A������ʧ� phone.cin �̭����� 50��66 �C�R���A�o�Ǥ�r�p�U�G
+  新酷音的 phone.cin 檔案格式基本上是以注音字根的鍵盤碼來排序，每一列就是一個鍵盤碼所對應的中文字。
+  在使用程式產生漢字注音對照表之前，必須手動把 phone.cin 裡面的第 50～66 列刪除，這些文字如下：
 
-    1 ��
-    q ��
-    a ��
-    z ��
-    2 ��
-    w �L
-    s �A
-    x �F
-    e ��
-    d ��
-    c ��
-    r �X
-    f �h
-    v ��
-    b ��
-    o ��
-    , �C
+    1 不
+    q 怕
+    a 嗎
+    z 肥
+    2 的
+    w 他
+    s 你
+    x 了
+    e 個
+    d 科
+    c 呵
+    r 幾
+    f 去
+    v 西
+    b 日
+    o 欸
+    , 耶
 
-  �Y���R���o�Ǥ�r�A���Ǧr���N�|�h�X�ǩǪ��`���r�ڡA�Ҧp�u�L�v�|���u�y�v�o�Ӫ`���r�ڡC
+  若不刪除這些文字，那些字元就會多出怪怪的注音字根，例如「他」會有「ㄊ」這個注音字根。
 
-  �{���CŪ���@�C�A�N�N�r���M�`���r�ڴ��J�{������C���c���A�p�G��C���w�g�s�b�Ӧr���A�h�����J�s�r���A�ӬO�b�Ӧr�����`���r�ڦ�C�ݩʤ����[�@���`���r�ڡC
+  程式每讀取一列，就將字元和注音字根插入程式的串列結構中，如果串列中已經存在該字元，則不插入新字元，而是在該字元的注音字根串列屬性中附加一筆注音字根。
   
-  �ϥ��W�v�������A�O�H�W�C B �M C �ҥN��������ɮק@���`�Φr���P�_�̾ڡC��Y���� B �� C �o����ɮפ����~�r�A���W�v�N�X�N�]�w�� 0�C�p�G���� D�A�h�W�v�N�X�� 1�]���`�Ρ^�C��l���~�r�h�����u�Φr�A�W�v�N�X�� 2�C
+  使用頻率的部分，是以上列 B 和 C 所代表的兩個檔案作為常用字的判斷依據。亦即落於 B 或 C 這兩個檔案中的漢字，其頻率代碼就設定為 0。如果落於 D，則頻率代碼為 1（次常用）。其餘的漢字則視為罕用字，頻率代碼為 2。
 
-�Ƶ�
+備註
   
-  �s�ŭ��� phone.cin �ɮץѦ� Subversion �ɮ׮w���o�Ghttp://svn.openfoundry.org/libchewingdata/�C
-  �]�ηj�M�u�s�ŭ����w�Ϊ`���ק�оǡv�^
+  新酷音的 phone.cin 檔案由此 Subversion 檔案庫取得：http://svn.openfoundry.org/libchewingdata/。
+  （或搜尋「新酷音詞庫及注音修改教學」）
 
-  �ѦҺ����Ghttp://chewing.csie.net/chewing_dict_edit.html
+  參考網頁：http://chewing.csie.net/chewing_dict_edit.html

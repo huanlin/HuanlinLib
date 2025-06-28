@@ -1,4 +1,4 @@
-using System;
+О╩©using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,10 +8,10 @@ namespace Huanlin.Common.Helpers
 	{
 		private RegExpPatterns() {}
 
-		// ╕╧╪к╕║╥|╖Д╕╗╧О╙╨╪пер║A╕Щ╕p╙G╕r╕Й╓╓╔X╡{╜╚╫ф╙╨╪пер║A╢N╔u╥|╖Д╗Л╡д╓@╜с║C╗р╕p║G<╘m╕W>Michael</╘m╕W>║C
+		// Ф╜╓Ф╗ёЕ╪▐Ф°┐Ф┴╬Ф┬░Е╟█Г └Ф╗≥Г╠╓О╪▄Д╫├Е╕┌Ф·°Е╜≈Д╦╡Д╦╜Е┤╨Г▐╬И┤█Х╓┤Г └Ф╗≥Г╠╓О╪▄Е╟╠Е▐╙Ф°┐Ф┴╬Е┬╟Г╛╛Д╦─Е─▀Ц─┌Д╬▀Е╕┌О╪ <Е╖⌠Е░█>Michael</Е╖⌠Е░█>Ц─┌
 		public const string OneTagPair = @"<(?<tag>\\w*)>(?<text>.*)</\\k<tag>>";
 
-		// ╕╧╪к╕║╔u╜n╛O╟_╘l╪пер╘н╣╡╖Т╪п╚eЁё╥|╢M╖Д║A╕Щ╓ё╨ч╛O╖_╕╗╧О║C╗р╕p║G<╘m╕W>║B</aa>║C
+		// Ф╜╓Ф╗ёЕ╪▐Е▐╙Х╕│Ф≤╞Х╣╥Е╖▀Ф╗≥Г╠╓Ф┬√Г╣░Ф²÷Ф╗≥Е┴█И┐╫Ф°┐Е╟▀Ф┴╬О╪▄Д╫├Д╦█Г╝║Ф≤╞Е░╕Ф┬░Е╟█Ц─┌Д╬▀Е╕┌О╪ <Е╖⌠Е░█>Ц─│</aa>Ц─┌
 		public const string Tags = @"<([^<>\s]*)(\s[^<>]*)?>";
 
 	}

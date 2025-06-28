@@ -1,20 +1,20 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Huanlin.Common.Helpers
 {
 	/// <summary>
-	/// ³B²z¦ì¤¸²Õªº¤u¨ãÃş§O¡C
+	/// è™•ç†ä½å…ƒçµ„çš„å·¥å…·é¡åˆ¥ã€‚
 	/// </summary>
 	public static class ByteHelper
 	{
 		/// <summary>
-		/// ±N¶Ç¤Jªº¦ì¤¸²Õªº¦ì¤¸¤ÏÂà¡C
-		/// §Y bit-7 ²¾¨ì bit-0¡Abit-6 ²¾¨ì bit-1¡Abit-5 ²¾¨ì bit-2¡A....¡C
+		/// å°‡å‚³å…¥çš„ä½å…ƒçµ„çš„ä½å…ƒåè½‰ã€‚
+		/// å³ bit-7 ç§»åˆ° bit-0ï¼Œbit-6 ç§»åˆ° bit-1ï¼Œbit-5 ç§»åˆ° bit-2ï¼Œ....ã€‚
 		/// </summary>
-		/// <param name="aByte">­n¤ÏÂàªº¦ì¤¸²Õ¡C</param>
-		/// <returns>¤ÏÂà¤§«áªº¦ì¤¸²Õ¡C</returns>
+		/// <param name="aByte">è¦åè½‰çš„ä½å…ƒçµ„ã€‚</param>
+		/// <returns>åè½‰ä¹‹å¾Œçš„ä½å…ƒçµ„ã€‚</returns>
 		public static byte Reverse(byte aByte)
 		{
 			byte result = 0x00;

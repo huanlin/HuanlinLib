@@ -1,12 +1,12 @@
-using System;
+ï»¿using System;
 
 namespace Huanlin.Common.Helpers
 {
     /// <summary>
-    /// SmartDate ´£¨Ñ¤F¥i¥H¬°ªÅ­Èªº¤é´Á«¬§O¡A¥H«K¥Î©ó¸ê®Æ®wªº¤é´Á®É¶¡Äæ¦ì¡C
+    /// SmartDate æä¾›äº†å¯ä»¥ç‚ºç©ºå€¼çš„æ—¥æœŸå‹åˆ¥ï¼Œä»¥ä¾¿ç”¨æ–¼è³‡æ–™åº«çš„æ—¥æœŸæ™‚é–“æ¬„ä½ã€‚
     /// </summary>
     /// <remarks>
-    /// ­×§ï¦Û CSLA .NET Ãş§O®w¡C
+    /// ä¿®æ”¹è‡ª CSLA .NET é¡åˆ¥åº«ã€‚
     /// See Chapter 5 for a full discussion of the need for this
     /// data type and the design choices behind it.
     /// </remarks>
@@ -70,7 +70,7 @@ namespace Huanlin.Common.Helpers
         }
 
         /// <summary>
-        /// SmartDate «Øºc¨ç¦¡¡C
+        /// SmartDate å»ºæ§‹å‡½å¼ã€‚
         /// </summary>
         /// <param name="date"></param>
         public SmartDate(object date)
@@ -247,9 +247,9 @@ namespace Huanlin.Common.Helpers
         }
 
 		/// <summary>
-		/// ¤ñ¹ï¨â­Ó DateTime ¬O§_¬Ûµ¥¡C
-		/// ¥Ñ©ó¦s¤J¸ê®Æ®w¤§«á¦A¨ú¥X¨Óªº¤é´Á®É¶¡·|¦³¨Ç·L»~®t¡A
-		/// ¦]¦¹­Y­n¤ñ¹ï±q¸ê®Æ®w¨ú¥Xªº¤é´Á®É¶¡¡A¥i©I¥s¦¹¨ç¦¡¡C
+		/// æ¯”å°å…©å€‹ DateTime æ˜¯å¦ç›¸ç­‰ã€‚
+		/// ç”±æ–¼å­˜å…¥è³‡æ–™åº«ä¹‹å¾Œå†å–å‡ºä¾†çš„æ—¥æœŸæ™‚é–“æœƒæœ‰äº›å¾®èª¤å·®ï¼Œ
+		/// å› æ­¤è‹¥è¦æ¯”å°å¾è³‡æ–™åº«å–å‡ºçš„æ—¥æœŸæ™‚é–“ï¼Œå¯å‘¼å«æ­¤å‡½å¼ã€‚
 		/// </summary>
 		/// <param name="dt1"></param>
 		/// <param name="dt2"></param>
@@ -259,7 +259,7 @@ namespace Huanlin.Common.Helpers
 			long diff = dt1.Ticks - dt2.Ticks;
 			if (diff < 0)
 				diff = 0 - diff;
-			if (diff < 50000)	// ¤¹³\ªº»~®t (³æ¦ì: ticks)
+			if (diff < 50000)	// å…è¨±çš„èª¤å·® (å–®ä½: ticks)
 			{
 				return true;
 			}
@@ -267,10 +267,10 @@ namespace Huanlin.Common.Helpers
 		}
 
         /// <summary>
-        /// ÀË¬d«ü©wªº SmartDate ÅÜ¼Æ¬° null ©ÎªÅªº¤é´Á¡C
+        /// æª¢æŸ¥æŒ‡å®šçš„ SmartDate è®Šæ•¸ç‚º null æˆ–ç©ºçš„æ—¥æœŸã€‚
         /// </summary>
-        /// <param name="value">SmartDate ÅÜ¼Æ</param>
-        /// <returns>­Y¬° </returns>
+        /// <param name="value">SmartDate è®Šæ•¸</param>
+        /// <returns>è‹¥ç‚º </returns>
         public static bool IsNullOrEmpty(SmartDate value)
         {
             return (value == null || value.IsEmpty);
@@ -512,7 +512,7 @@ namespace Huanlin.Common.Helpers
             if (value is SmartDate)
                 return CompareTo((SmartDate)value);
             else
-                throw new ArgumentException("¤Ş¼Æ value ¤£¬O SmartDate «¬§O!");
+                throw new ArgumentException("å¼•æ•¸ value ä¸æ˜¯ SmartDate å‹åˆ¥!");
         }
 
         /// <summary>

@@ -1,14 +1,14 @@
-�ۻs�`����Ʈw
+﻿自製注音資料庫
 
-GenPhoneticData.exe �i�ΨӲ��ͪ`������ɡA�]�A�G
+GenPhoneticData.exe 可用來產生注音資料檔，包括：
 
-1. Char2Phon.dat - �r���P�������`���C
-2. MultiPhonCharAll.dat - ���ɮץ]�t�Ҧ����h���r�C
-3. MultiPhonChar.Commondat - ���ɮץ]�t�@�몺�h���r�]code point < 65536�^�C
+1. Char2Phon.dat - 字元與對應的注音。
+2. MultiPhonCharAll.dat - 此檔案包含所有的多音字。
+3. MultiPhonChar.Commondat - 此檔案包含一般的多音字（code point < 65536）。
 
-���u��ݭnŪ���s�ŭ��� UTF-8 ������ phone.cin �ɮסA���ɮץi�Ѧ� Subversion
-�ɮ׮w���o�Ghttp://svn.openfoundry.org/libchewingdata/�C
-�]�ηj�M�u�s�ŭ����w�Ϊ`���ק�оǡv�^
+此工具需要讀取新酷音的 UTF-8 版本的 phone.cin 檔案，該檔案可由此 Subversion
+檔案庫取得：http://svn.openfoundry.org/libchewingdata/。
+（或搜尋「新酷音詞庫及注音修改教學」）
 
-�ѦҺ����Ghttp://chewing.csie.net/chewing_dict_edit.html
+參考網頁：http://chewing.csie.net/chewing_dict_edit.html
 

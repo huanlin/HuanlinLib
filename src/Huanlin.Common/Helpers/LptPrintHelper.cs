@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
@@ -152,7 +152,7 @@ namespace Huanlin.Common.Helpers
         {
             if (m_FileStream == null)
             {
-                throw new Exception("©|¥¼«Ø¥ß¦Lªí¾÷¦ê¬y¡A½Ğ¥ı©I¥s OpenPrinter()");
+                throw new Exception("å°šæœªå»ºç«‹å°è¡¨æ©Ÿä¸²æµï¼Œè«‹å…ˆå‘¼å« OpenPrinter()");
             }
 
             byte[] buf;
@@ -175,7 +175,7 @@ namespace Huanlin.Common.Helpers
         }
 
         /// <summary>
-        /// °e¥X¸õ­¶±±¨î¦r¤¸¡C
+        /// é€å‡ºè·³é æ§åˆ¶å­—å…ƒã€‚
         /// </summary>
         public void SendFormFeed()
         {
