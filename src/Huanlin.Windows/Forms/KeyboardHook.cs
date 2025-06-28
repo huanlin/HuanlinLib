@@ -5,24 +5,14 @@ using Huanlin.Windows.WinApi;
 
 namespace Huanlin.Windows.Forms;
 
-public class KeyboardHookEventArgs : EventArgs 
+public class KeyboardHookEventArgs(int hookCode, int wparam, int lparam, Keys key, bool isPressed) : EventArgs 
 {
-	public KeyboardHookEventArgs(int hookCode, int wparam, int lparam, Keys key, bool isPressed)
-	{
-		HookCode = hookCode;
-		WParam = wparam;
-		LParam = lparam;
-		Key = key;
-		IsPressed = isPressed;
-		IsHandled = false;
-	}
-
-	public readonly int HookCode;	// Hook callback 函式的 nCode 參數
-	public readonly int WParam;		// Hook callback 函式的 wParam 參數
-	public readonly int LParam;		// Hook callback 函式的 lParam 參數
-	public readonly Keys Key;		// 按鍵
-	public readonly bool IsPressed;	// 此按鍵是按下還是放開，true=按下
-	public bool IsHandled;			// 此按鍵是否已經被處理掉（不傳給後續的鍵盤掛鉤）
+	public readonly int HookCode = hookCode;	// Hook callback 函式的 nCode 參數
+	public readonly int WParam = wparam;		// Hook callback 函式的 wParam 參數
+	public readonly int LParam = lparam;		// Hook callback 函式的 lParam 參數
+	public readonly Keys Key = key;		// 按鍵
+	public readonly bool IsPressed = isPressed;	// 此按鍵是按下還是放開，true=按下
+	public bool IsHandled = false;			// 此按鍵是否已經被處理掉（不傳給後續的鍵盤掛鉤）
 }
 
 public delegate void KeyboardHookEvent (object sender, KeyboardHookEventArgs args);

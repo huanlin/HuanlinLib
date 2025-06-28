@@ -57,18 +57,11 @@ public class KeyboardInfo
 /// <summary>
 /// 鍵盤狀態的結構。
 /// </summary>
-public struct KeyStateInfo
+public struct KeyStateInfo(Keys key, bool ispressed, bool istoggled)
 {
-	Keys m_Key;
-	bool m_IsPressed;
-	bool m_IsToggled;
-
-	public KeyStateInfo(Keys key, bool ispressed, bool istoggled)
-	{
-		m_Key = key;
-		m_IsPressed = ispressed;
-		m_IsToggled = istoggled;
-	}
+	public Keys m_Key = key;
+	public bool m_IsPressed = ispressed;
+	public bool m_IsToggled = istoggled;
 
 	public static KeyStateInfo Default
 	{
