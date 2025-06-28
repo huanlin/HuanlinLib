@@ -45,7 +45,7 @@ jobs:
       run: dotnet build src/HuanlinLib.sln --configuration Release --no-restore /p:Version=${{ steps.get_version.outputs.VERSION }}
     
     - name: Test
-      run: dotnet test tests/Test.Huanlin/Test.Huanlin.csproj --no-build --configuration Release --verbosity normal
+      run: dotnet test src/Test.Huanlin/Test.Huanlin.csproj --no-build --configuration Release --verbosity normal
     
     - name: Package
       run: dotnet pack src/HuanlinLib.sln --configuration Release --no-build --output ./artifacts /p:Version=${{ steps.get_version.outputs.VERSION }}
