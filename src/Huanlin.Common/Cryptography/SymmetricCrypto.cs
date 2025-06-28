@@ -21,7 +21,7 @@ namespace Huanlin.Common.Cryptography
     /// </summary> 
     public class SymmetricCrypto
     {
-        private const string DefaultIntializationVector = "%1Az=-@qT";
+        private const string DefaultIntializationVector = "1Az=-@qT";
         private const int BufferSize = 2048;
 
         public enum Provider
@@ -36,6 +36,7 @@ namespace Huanlin.Common.Cryptography
         private ByteArray m_InitVector;
         private SymmetricAlgorithm m_SymmAlgorithm;
 
+        public SymmetricAlgorithm GetSymmetricAlgorithm() => m_SymmAlgorithm;
 
         /// <summary> 
         /// Instantiates a new symmetric encryption object using the specified provider. 
@@ -58,8 +59,11 @@ namespace Huanlin.Common.Cryptography
                     break;
             }
 
+            //m_SymmAlgorithm.Mode = CipherMode.CBC;
+            //m_SymmAlgorithm.Padding = PaddingMode.PKCS7;
+
             //-- make sure key and IV are always set, no matter what 
-            this.Key = RandomKey();
+            Key = RandomKey();
             if (useDefaultInitializationVector)
             {
                 this.IntializationVector = new ByteArray(DefaultIntializationVector);
@@ -67,34 +71,6 @@ namespace Huanlin.Common.Cryptography
             else
             {
                 this.IntializationVector = RandomInitializationVector();
-            }
-        }
-
-        /// <summary> 
-        /// Key size in bytes. We use the default key size for any given provider; if you 
-        /// want to force a specific key size, set this property 
-        /// </summary> 
-        public int KeySizeBytes
-        {
-            get { return m_SymmAlgorithm.KeySize / 8; }
-            set
-            {
-                m_SymmAlgorithm.KeySize = value * 8;
-                m_Key.MaxBytes = value;
-            }
-        }
-
-        /// <summary> 
-        /// Key size in bits. We use the default key size for any given provider; if you 
-        /// want to force a specific key size, set this property 
-        /// </summary> 
-        public int KeySizeBits
-        {
-            get { return m_SymmAlgorithm.KeySize; }
-            set
-            {
-                m_SymmAlgorithm.KeySize = value;
-                m_Key.MaxBits = value;
             }
         }
 
@@ -203,14 +179,14 @@ namespace Huanlin.Common.Cryptography
         /// </summary> 
         public byte[] Encrypt(byte[] data)
         {
-            MemoryStream ms = new MemoryStream();
-
             ValidateKeyAndIV(true);
 
-            CryptoStream cs = new CryptoStream(ms, m_SymmAlgorithm.CreateEncryptor(), CryptoStreamMode.Write);
+            var encryptor = m_SymmAlgorithm.CreateEncryptor(Key.Bytes, IntializationVector.Bytes);
+
+            using MemoryStream ms = new MemoryStream();
+            using CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write);
             cs.Write(data, 0, data.Length);
-            cs.Close();
-            ms.Close();
+            cs.FlushFinalBlock();
 
             return ms.ToArray();
         }
@@ -313,70 +289,16 @@ namespace Huanlin.Common.Cryptography
         /// Decrypts the specified data using preset key and preset initialization vector 
         /// </summary> 
         public byte[] Decrypt(byte[] encryptedData)
-        {
-            MemoryStream ms = new MemoryStream(encryptedData, 0, encryptedData.Length);
-            byte[] buf = new byte[encryptedData.Length];
-
+        {           
             ValidateKeyAndIV(false);
-            CryptoStream cs = new CryptoStream(ms, m_SymmAlgorithm.CreateDecryptor(), CryptoStreamMode.Read);
 
-            try
-            {
-                int cnt = cs.Read(buf, 0, encryptedData.Length - 1);
-                byte[] result = new byte[cnt];
-                Array.Copy(buf, result, cnt);
+            ICryptoTransform decryptor = m_SymmAlgorithm.CreateDecryptor(Key.Bytes, IntializationVector.Bytes);
+            using MemoryStream ms = new MemoryStream(encryptedData);
+            using CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
 
-                return result;
-            }
-            catch (CryptographicException ex)
-            {
-                throw new CryptographicException("資料解密失敗! 可能是因為提供了不正確的金鑰。", ex);
-            }
-            finally
-            {
-                cs.Close();
-            }
+            using MemoryStream output = new MemoryStream();
+            cs.CopyTo(output); // 將解密後的資料複製到 output stream
+            return output.ToArray();
         }
-
-
-        /// <summary>
-        /// 傳回指定之對稱式加密演算法的合法金鑰。
-        /// </summary>
-        /// <param name="symmAlgo">對稱式加密演算法物件。</param>
-        /// <param name="key">愈指定的金鑰（字串）。</param>
-        /// <returns>合法的金鑰（byte 陣列）。</returns>
-        public static byte[] GetLegalKey(SymmetricAlgorithm symmAlgo, string key)
-        {
-            byte[] keyData = Encoding.Default.GetBytes(key);
-
-            if (symmAlgo.LegalKeySizes.Length > 0)
-            {
-                int maxBytes = symmAlgo.LegalKeySizes[0].MaxSize / 8;
-                int minBytes = symmAlgo.LegalKeySizes[0].MinSize / 8;
-
-                if (keyData.Length > maxBytes)
-                {
-                    byte[] buf = new byte[maxBytes];
-                    Array.Copy(keyData, buf, buf.Length);
-                    return buf;
-                }
-                else if (keyData.Length < minBytes)
-                {
-                    byte[] buf = new byte[minBytes];
-                    Array.Copy(keyData, buf, keyData.Length);
-                    return buf;
-                }
-                else
-                {
-                    // key 的長度介於 minBytes 和 maxBytes 之間。
-                    int length = keyData.Length + 8 - (keyData.Length % 8);
-                    byte[] buf = new byte[length];
-                    Array.Copy(keyData, buf, keyData.Length);
-                    return buf;
-                }
-            }
-            return keyData;
-        }
-
     }
 }
