@@ -209,7 +209,7 @@ namespace Huanlin.Collections
         /// <summary> 
         /// Returns text representation of bytes using the default text encoding 
         /// </summary> 
-        public new string ToString()
+        public override string ToString()
         {
             return this.Text;
         }

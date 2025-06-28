@@ -21,7 +21,7 @@ namespace Huanlin.Common.Cryptography
     /// </summary> 
     public class SymmetricCrypto
     {
-        private const string DefaultIntializationVector = "1Az=-@qT";
+        private const string DefaultInitVector = "1Az=-@qT";
         private const int BufferSize = 2048;
 
         public enum Provider
@@ -41,7 +41,7 @@ namespace Huanlin.Common.Cryptography
         /// <summary> 
         /// Instantiates a new symmetric encryption object using the specified provider. 
         /// </summary> 
-        public SymmetricCrypto(Provider provider, bool useDefaultInitializationVector)
+        public SymmetricCrypto(Provider provider, bool useDefaultInitVector)
         {
             switch (provider)
             {
@@ -64,13 +64,13 @@ namespace Huanlin.Common.Cryptography
 
             //-- make sure key and IV are always set, no matter what 
             Key = RandomKey();
-            if (useDefaultInitializationVector)
+            if (useDefaultInitVector)
             {
-                this.IntializationVector = new ByteArray(DefaultIntializationVector);
+                this.IntiVector = new ByteArray(DefaultInitVector);
             }
             else
             {
-                this.IntializationVector = RandomInitializationVector();
+                this.IntiVector = RandomInitVector();
             }
         }
 
@@ -93,9 +93,9 @@ namespace Huanlin.Common.Cryptography
         /// <summary> 
         /// Using the default Cipher Block Chaining (CBC) mode, all data blocks are processed using 
         /// the value derived from the previous block; the first data block has no previous data block 
-        /// to use, so it needs an InitializationVector to feed the first block 
+        /// to use, so it needs an InitVector to feed the first block 
         /// </summary> 
-        public ByteArray IntializationVector
+        public ByteArray IntiVector
         {
             get { return m_InitVector; }
             set
@@ -109,7 +109,7 @@ namespace Huanlin.Common.Cryptography
         /// <summary> 
         /// generates a random Initialization Vector, if one was not provided 
         /// </summary> 
-        public ByteArray RandomInitializationVector()
+        public ByteArray RandomInitVector()
         {
             m_SymmAlgorithm.GenerateIV();
             ByteArray iv = new ByteArray(m_SymmAlgorithm.IV);
@@ -147,7 +147,7 @@ namespace Huanlin.Common.Cryptography
             {
                 if (isEncrypting)
                 {
-                    m_InitVector = RandomInitializationVector();
+                    m_InitVector = RandomInitVector();
                 }
                 else
                 {
@@ -181,7 +181,7 @@ namespace Huanlin.Common.Cryptography
         {
             ValidateKeyAndIV(true);
 
-            var encryptor = m_SymmAlgorithm.CreateEncryptor(Key.Bytes, IntializationVector.Bytes);
+            var encryptor = m_SymmAlgorithm.CreateEncryptor(Key.Bytes, IntiVector.Bytes);
 
             using MemoryStream ms = new MemoryStream();
             using CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write);
@@ -196,7 +196,7 @@ namespace Huanlin.Common.Cryptography
         /// </summary> 
         public byte[] Encrypt(Stream s, ByteArray key, ByteArray iv)
         {
-            this.IntializationVector = iv;
+            this.IntiVector = iv;
             this.Key = key;
             return Encrypt(s);
         }
@@ -292,7 +292,7 @@ namespace Huanlin.Common.Cryptography
         {           
             ValidateKeyAndIV(false);
 
-            ICryptoTransform decryptor = m_SymmAlgorithm.CreateDecryptor(Key.Bytes, IntializationVector.Bytes);
+            ICryptoTransform decryptor = m_SymmAlgorithm.CreateDecryptor(Key.Bytes, IntiVector.Bytes);
             using MemoryStream ms = new MemoryStream(encryptedData);
             using CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
 

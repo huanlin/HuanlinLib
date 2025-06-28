@@ -78,7 +78,7 @@ namespace Huanlin.AppRegistration
 			StringBuilder sb = new StringBuilder();
 			sb.Append(crypto.Key.Base64String);
 			sb.Append(';');
-			sb.Append(crypto.IntializationVector.Base64String);
+			sb.Append(crypto.IntiVector.Base64String);
 			sb.Append(';');
 			sb.Append(Convert.ToBase64String(encryptedData));
 
@@ -167,7 +167,7 @@ namespace Huanlin.AppRegistration
 			// 解密
 			SymmetricCrypto crypto = new SymmetricCrypto(SymmetricCrypto.Provider.Rijndael, false);
 			byte[] key = Convert.FromBase64String(parts[2]);
-			crypto.IntializationVector = new ByteArray(Convert.FromBase64String(parts[3]));
+			crypto.IntiVector = new ByteArray(Convert.FromBase64String(parts[3]));
 			byte[] decryptedData = crypto.Decrypt(Convert.FromBase64String(parts[4]), key);
 
 			// 驗證簽章
