@@ -2,7 +2,7 @@ name: Build and Publish
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
     tags:
       - '*.*.*'
   pull_request:
@@ -45,10 +45,12 @@ jobs:
       run: dotnet build src/HuanlinLib.sln --configuration Release --no-restore /p:Version=${{ steps.get_version.outputs.VERSION }}
     
     - name: Test
-      run: dotnet test src/Test.Huanlin/Test.Huanlin.csproj --no-build --configuration Release --verbosity normal
+      run: dotnet test src/Huanlin.Common.Tests/Huanlin.Common.Tests.csproj --no-build --configuration Release --verbosity normal
     
     - name: Package
-      run: dotnet pack src/HuanlinLib.sln --configuration Release --no-build --output ./artifacts /p:Version=${{ steps.get_version.outputs.VERSION }}
+      run: |
+        dotnet pack src/Huanlin.Common/Huanlin.Common.csproj --configuration Release --no-build --output ./artifacts /p:Version=${{ steps.get_version.outputs.VERSION }}
+        dotnet pack src/Huanlin.Windows/Huanlin.Windows.csproj --configuration Release --no-build --output ./artifacts /p:Version=${{ steps.get_version.outputs.VERSION }}
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4

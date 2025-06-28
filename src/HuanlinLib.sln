@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{02EA681E-C7D
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Huanlin", "Test.Huanlin\Test.Huanlin.csproj", "{F1E7D753-DC4C-9EBB-7797-D8A4C063D45F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huanlin.Common.Tests", "Huanlin.Common.Tests\Huanlin.Common.Tests.csproj", "{F1E7D753-DC4C-9EBB-7797-D8A4C063D45F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

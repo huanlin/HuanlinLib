@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Test.Huanlin
+namespace Huanlin.Common.Tests
 {
     /// <summary>
     ///This is a test class for Huanlin.Common.Helpers.ByteHelper and is intended

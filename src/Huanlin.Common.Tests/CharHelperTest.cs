@@ -3,7 +3,7 @@
 using Huanlin.Common.Helpers;
 using NUnit.Framework;
 
-namespace Test.Huanlin
+namespace Huanlin.Common.Tests
 {
     /// <summary>
     ///This is a test class for Huanlin.Common.Helpers.CharHelper and is intended
