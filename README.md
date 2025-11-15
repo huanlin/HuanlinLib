@@ -9,6 +9,6 @@
 
 最近一次的主要更新：
 
-- 升級至 .NET 9。
+- 升級至 .NET 10。
 
 欲查看詳細修改紀錄，請參考 [CHANGELOG.md](CHANGELOG.md)。
