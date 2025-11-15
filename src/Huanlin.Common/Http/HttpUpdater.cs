@@ -176,38 +176,18 @@ namespace Huanlin.Common.Http
         }
 
 
-        private void StripComments(ref string[] fileList)
+        private IEnumerable<string> StripComments(IEnumerable<string> lines)
         {
             // Parse the file list to strip comments
-            StringBuilder sb = new StringBuilder();
-            int i;
-
-            foreach (string file in fileList)
+            return lines.Select(line =>
             {
-                string fileAux;
-
-                i = file.IndexOf("\'");
-                if (i >= 0)	// 去掉註解（以單引號開始）
+                int i = line.IndexOf('\'');
+                if (i >= 0) // 去掉註解（以單引號開始）
                 {
-                    fileAux = file.Substring(0, i).Trim();
+                    return line.Substring(0, i).Trim();
                 }
-                else
-                {
-                    fileAux = file.Trim();
-                }
-
-                if (fileAux != string.Empty)
-                {
-                    if (sb.Length > 0)
-                    {
-                        sb.Append('\n');
-                    }
-                    sb.Append(fileAux);
-                }
-            }
-
-            // Parse the file list again
-            fileList = sb.ToString().Split('\n');
+                return line.Trim();
+            }).Where(line => !string.IsNullOrEmpty(line));
         }
 
         private bool FileExistsAndNotEmpty(string filename)
@@ -232,14 +212,19 @@ namespace Huanlin.Common.Http
 
             CleanUp();
 
-            // 取得 Update.txt 的內容
-            string contents = await _httpClient.GetStringAsync(m_ServerUri + updateFileName);
+            // 取得 Update.txt 的內容並逐行讀取
+            var lines = new List<string>();
+            using (var stream = await _httpClient.GetStreamAsync(m_ServerUri + updateFileName))
+            using (var reader = new StreamReader(stream))
+            {
+                string line;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
 
-            // Strip the "LF" from CR+LF and break it down by line
-            contents = contents.Replace("\n", "");
-            string[] fileList = contents.Split('\r');
-
-            StripComments(ref fileList);
+            var fileList = StripComments(lines);
 
             string[] info;
             string infoFilePath;
@@ -277,9 +262,14 @@ namespace Huanlin.Common.Http
                 }
 
                 // 去掉開頭的 '.' 和兩個反斜線 '\'。
-                while (infoFilePath[0] == '.' || infoFilePath[0] == '\\')
+                while (infoFilePath.Length > 0 && (infoFilePath[0] == '.' || infoFilePath[0] == '\\'))
                 {
                     infoFilePath = infoFilePath.Substring(1);
+                }
+
+                if (string.IsNullOrEmpty(infoFilePath))
+                {
+                    continue;
                 }
 
                 UpdateItem item = new UpdateItem();
