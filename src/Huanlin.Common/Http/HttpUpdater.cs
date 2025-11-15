@@ -46,7 +46,6 @@ namespace Huanlin.Common.Http
 
         private const string ToDeleteExtension = ".ToDelete";
         private const string TempFileExtension = ".UpdTmp";
-        private const string UpdateFileName = "Update.txt";
 
         private const string ErrorClientPathEmpty = "AutoUpdate.ClientPath 不可為空字串!";
         private const string ErrorDownloadingFile = "無法下載檔案: \r\n";
@@ -226,7 +225,7 @@ namespace Huanlin.Common.Http
         /// 還會檢查本地端的檔案是否需要更新或刪除。處理的結果是儲存在
         /// m_UpdateItems 屬性中。
         /// </summary>
-        public async Task GetUpdateListAsync()
+        public async Task GetUpdateListAsync(string updateFileName)
         {
             CheckClientPath();
             CheckServerUrl();
@@ -234,7 +233,7 @@ namespace Huanlin.Common.Http
             CleanUp();
 
             // 取得 Update.txt 的內容
-            string contents = await _httpClient.GetStringAsync(m_ServerUri + UpdateFileName);
+            string contents = await _httpClient.GetStringAsync(m_ServerUri + updateFileName);
 
             // Strip the "LF" from CR+LF and break it down by line
             contents = contents.Replace("\n", "");

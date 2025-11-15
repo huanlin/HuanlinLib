@@ -60,7 +60,7 @@ namespace Huanlin.Common.Http
         /// 還會檢查本地端的檔案是否需要更新或刪除。處理的結果是儲存在
         /// m_UpdateItems 屬性中。
         /// </summary>
-        Task GetUpdateListAsync();
+        Task GetUpdateListAsync(string updateFileName);
 
         bool HasUpdates();
 
