@@ -80,8 +80,13 @@ namespace Huanlin.Windows.WinApi;
 	/// IFELanguage interface.
 	/// Ref: http://msdn.microsoft.com/en-us/library/ms970145.aspx
 	/// </summary>
-	/// <remarks>The order of methods is relevant!</remarks>
+	/// <remarks>
+    /// The order of methods is relevant!
+    /// **警告：IFELanguage 是一個過時的 COM 介面，在現代 Windows 系統中可能不再可靠。**
+    /// **請考慮使用 Text Services Framework (TSF) 作為替代方案。**
+    /// </remarks>
 	[ComImport]
+    [Obsolete("IFELanguage 是一個過時的 COM 介面，請改用 Text Services Framework (TSF)。")]
 	[Guid(Constants.IID_IFELanguage)]
 	[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	public interface IFELanguage
