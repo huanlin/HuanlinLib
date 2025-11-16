@@ -2,18 +2,19 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Huanlin.Windows.Sys;
 
 /// <summary>
 /// 此類別可用來執行檔案。
 /// </summary>
-public class FileRunner : IDisposable
+public sealed class FileRunner : IDisposable
 {
 	private ProcessStartInfo m_StartInfo;
 	private Process m_Process;
 	private bool m_NeedWait;		// 是否等待應用程式執行結束
-	private int m_WaitTime;			// 要等多久（seconds），0 表示採用內定值（30分鐘）
+	private TimeSpan m_WaitTime;			// 要等多久，TimeSpan.Zero 表示採用內定值（30分鐘）
 
 	private string m_ErrMsg;
 	private StringBuilder m_StdError;
@@ -21,7 +22,6 @@ public class FileRunner : IDisposable
     private readonly object _lockObject = new object();
 
     private event DataReceivedEventHandler m_StdOutputReceivedEvent;
-	private event EventHandler m_ExitedEvent;
 
 	public FileRunner()
 	{
@@ -31,7 +31,7 @@ public class FileRunner : IDisposable
 		m_StartInfo = new ProcessStartInfo();
 
 		m_NeedWait = true;
-		m_WaitTime = 0;
+		m_WaitTime = TimeSpan.Zero;
 		m_StartInfo.CreateNoWindow = false;
 		m_StartInfo.UseShellExecute = false;
 		m_StartInfo.WorkingDirectory = "";
@@ -48,86 +48,122 @@ public class FileRunner : IDisposable
 		}
 	}
 
-	/// <summary>
-	/// 執行檔案。
-	/// </summary>
-	/// <param name="filename">檔案名稱。</param>
-	/// <param name="argument">檔案執行時帶的參數，可傳空字串。</param>
-	/// <returns>若執行錯誤，則設定錯誤訊息並傳回 false。</returns>
-	public bool Run(string filename, string argument)
-	{
-		if (Running)
-		{
-			m_ErrMsg = "先前執行的程式尚未結束!";
-			return false;
-		}
-
-		m_ErrMsg = "";
-		m_StdError.Length = 0;
-		m_StdOutput.Length = 0;
-
-		if (String.IsNullOrEmpty(filename))
-		{
-			throw new ArgumentException("未指定欲執行的檔案名稱!");
-		}
-
-		// 不要檢查檔案是否存在，因為有些是在 PATH 路徑下的檔案
-		/*
-		if (!File.Exists(filename))
-		{
-			m_ErrMsg = "指定的檔案不存在: " + filename;
-			return false;
-		}*/
-
-		if (!String.IsNullOrEmpty(WorkingDirectory))
-		{
-			if (!Directory.Exists(WorkingDirectory))
-			{
-				throw new InvalidOperationException("指定的工作路徑不存在: " + WorkingDirectory);
-			}
-		}
-
-		m_StartInfo.FileName = filename;
-		m_StartInfo.Arguments = argument;
-
-		m_Process = new Process();
-		m_Process.StartInfo = m_StartInfo;
-
-		// 訂閱 process 事件
-		m_Process.Exited += new EventHandler(Process_Exited); 
-		m_Process.OutputDataReceived += new DataReceivedEventHandler(Process_OutputDataReceived);
-		m_Process.ErrorDataReceived += new DataReceivedEventHandler(Process_ErrorDataReceived);
-
-		try
-		{				
-			if (m_Process.Start())
-			{
-				if (RedirectStandardOutput)	// 需要重新導向 console 輸出
-				{
-					m_Process.BeginOutputReadLine();
-				}
-				// 不重新導向 console 輸出，那麼等待程式執行完畢的機制必須另尋他法
-				if (m_NeedWait)
-				{
-					WaitToKill();
-					KillProcess();						
-				}
-				return true;
-			}
-			else
-			{
-				m_ErrMsg = "沒有啟動新的處理序（可能重複使用既有的處理序）。";
-				return false;
-			}
-		}
-		catch (Exception)
+        public async Task<int> RunAsync(string filename, string argument)
         {
-			m_Process.Close();
-			m_Process.Dispose();
-			m_Process = null;
-            throw;
-        }			
-	}
+            if (Running)
+            {
+                throw new InvalidOperationException("先前執行的程式尚未結束!");
+            }
+
+            m_ErrMsg = "";
+            m_StdError.Length = 0;
+            m_StdOutput.Length = 0;
+
+            if (string.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("未指定欲執行的檔案名稱!", nameof(filename));
+            }
+
+            if (!string.IsNullOrEmpty(WorkingDirectory) && !Directory.Exists(WorkingDirectory))
+            {
+                throw new DirectoryNotFoundException("指定的工作路徑不存在: " + WorkingDirectory);
+            }
+
+            m_StartInfo.FileName = filename;
+            m_StartInfo.Arguments = argument;
+
+            m_Process = new Process { StartInfo = m_StartInfo, EnableRaisingEvents = true };
+
+            var tcs = new TaskCompletionSource<int>();
+
+            m_Process.Exited += (sender, args) => tcs.TrySetResult(m_Process.ExitCode);
+
+            if (RedirectStandardOutput)
+            {
+                m_Process.OutputDataReceived += Process_OutputDataReceived;
+                m_Process.ErrorDataReceived += Process_ErrorDataReceived;
+            }
+
+            try
+            {
+                if (!m_Process.Start())
+                {
+                    m_Process.Dispose();
+                    m_Process = null;
+                    throw new InvalidOperationException("沒有啟動新的處理序（可能重複使用既有的處理序）。");
+                }
+
+                if (RedirectStandardOutput)
+                {
+                    m_Process.BeginOutputReadLine();
+                    m_Process.BeginErrorReadLine();
+                }
+
+                if (!m_NeedWait)
+                {
+                    tcs.TrySetResult(0); // 不需要等待，立即完成 Task
+                    return await tcs.Task;
+                }
+
+                var waitDuration = m_WaitTime <= TimeSpan.Zero
+                                    ? TimeSpan.FromMinutes(30)  // 預設等待 30 分鐘
+                                    : m_WaitTime;
+
+                using (var timeoutCts = new System.Threading.CancellationTokenSource(waitDuration))
+                {
+                    using (timeoutCts.Token.Register(() => tcs.TrySetException(new TimeoutException($"執行的應用程式超過指定的等待時間 ({waitDuration.TotalSeconds} 秒) 而被強制終止!"))))
+                    {
+                        return await tcs.Task;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is TimeoutException)
+                {
+                    KillProcess(); // 只有在逾時的時候才強制終止
+                }
+                else
+                {
+                    // 對於其他錯誤，確保資源被釋放
+                    if (m_Process != null)
+                    {
+                        m_Process.Dispose();
+                        m_Process = null;
+                    }
+                }
+                throw;
+            }
+            finally
+            {
+                if (m_Process != null && RedirectStandardOutput)
+                {
+                    m_Process.OutputDataReceived -= Process_OutputDataReceived;
+                    m_Process.ErrorDataReceived -= Process_ErrorDataReceived;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 執行檔案。
+        /// </summary>
+        /// <param name="filename">檔案名稱。</param>
+        /// <param name="argument">檔案執行時帶的參數，可傳空字串。</param>
+        /// <returns>若執行成功則傳回 true，否則傳回 false 並設定 ErrorMsg 屬性。</returns>
+        public bool Run(string filename, string argument)
+        {
+            try
+            {
+                // 同步等待非同步版本完成
+                RunAsync(filename, argument).GetAwaiter().GetResult();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                m_ErrMsg = ex.Message;
+                return false;
+            }
+        }
 
 	void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
 	{
@@ -145,75 +181,42 @@ public class FileRunner : IDisposable
 		Process_OutputDataReceived(sender, e);
 	}
 
+    private void OnStdOutputReceived(DataReceivedEventArgs args)
+    {
+        if (m_StdOutputReceivedEvent != null)
+        {
+            // 觸發用戶端事件（Note: 用戶端若要在此事件中更新 UI，務必 marshal 回主執行緒!）
+            m_StdOutputReceivedEvent(this, args);
+        }
+    }
 
-	private void Process_Exited(object sender, EventArgs e)
-	{
-		OnProcessExited(e);
-	}
+    /// <summary>
+    /// 強制終止執行的程式。
+    /// </summary>
+    public void KillProcess()
+    {
+        if (m_Process == null)
+            return;
 
-	private void OnProcessExited(EventArgs e)
-	{
-		if (m_ExitedEvent != null)
-		{
-			m_ExitedEvent(this, e);
-		}
-	}
-
-	private void WaitToKill()
-	{
-		int waitTimeToKill;
-
-		if (m_WaitTime <= 0)	// 如果沒有指定等待時間
-		{
-			waitTimeToKill = 1000 * 60 * 30;	// 則預設等待 30 分鐘
-		}
-		else
-		{
-			waitTimeToKill = 1000 * m_WaitTime;
-		}
-		m_Process.WaitForExit(waitTimeToKill);
-	}
-
-	private void OnStdOutputReceived(DataReceivedEventArgs args)
-	{
-		if (m_StdOutputReceivedEvent != null)
-		{				
-			// 觸發用戶端事件（Note: 用戶端若要在此事件中更新 UI，務必 marshal 回主執行緒!）
-			m_StdOutputReceivedEvent(this, args);
-
-			// 注意：這裡一定要延遲一下，拖延此事件所屬的 worker thread 的速度，
-			// 因為 UpdateUI 會導致控制項更新，這更新要花些時間，如果 worker thread 速度很快地
-			// 一直塞資料進來，user 又用滑鼠在視窗上東點西點的，會導致整個 main form 訊息佇列
-			// 來不及處理，而讓程式看起來像當掉一樣。註: 用 Application.DoEvents() 沒有幫助。
-
-			System.Threading.Thread.Sleep(10);	
-		}
-	}
-
-	/// <summary>
-	/// 強制終止執行的程式。
-	/// </summary>
-	public void KillProcess()
-	{
-		if (m_Process == null)
-			return;
-
-		if (m_Process.HasExited == false)
-		{
-			m_Process.Kill();
-			m_ErrMsg = "執行的應用程式超過指定等待時間而被強制終止!";
-		}
-
-		// 解除訂閱事件
-		m_Process.Exited -= this.Process_Exited;
-		m_Process.OutputDataReceived -= this.Process_OutputDataReceived;
-		m_Process.ErrorDataReceived -= this.Process_ErrorDataReceived;
-
-		m_Process.Close();
-		m_Process.Dispose();
-		m_Process = null;
-	}
-
+        try
+        {
+            if (!m_Process.HasExited)
+            {
+                m_Process.Kill();
+                m_ErrMsg = "執行的應用程式超過指定等待時間而被強制終止!";
+            }
+        }
+        catch (Exception ex)
+        {
+            m_ErrMsg = "嘗試終止處理序時發生錯誤: " + ex.Message;
+        }
+        finally
+        {
+            m_Process.Close();
+            m_Process.Dispose();
+            m_Process = null;
+        }
+    }
 	#region 屬性------------------------------
 
 	public bool Running
@@ -273,16 +276,16 @@ public class FileRunner : IDisposable
 	}
 
 	/// <summary>
-	/// 要等多久（seconds），0 表示採用內定值（30分鐘）。超過此時間 process 將被強制終止。
+	/// 要等多久。若設為 TimeSpan.Zero，表示採用內定值（30分鐘）。超過此時間 process 將被強制終止。
 	/// </summary>
-	public int WaitTime
+	public TimeSpan WaitTime
 	{
 		get { return m_WaitTime; }
 		set
 		{
-			if (value < 0 || value > (24 * 60 * 60))
+			if (value < TimeSpan.Zero || value.TotalHours > 24)
 			{
-				throw new Exception("WaitTime 不可超過 24 小時!");
+				throw new ArgumentOutOfRangeException(nameof(WaitTime), "WaitTime 不可為負值或超過 24 小時!");
 			}
 			m_WaitTime = value;
 		}
@@ -342,22 +345,6 @@ public class FileRunner : IDisposable
 	#endregion
 
 	#region 事件--------------------------------
-
-	/// <summary>
-	/// 執行的程式「正常」結束時會觸發此事件。若程式被元件強制終止（直接 Kill），則不會觸發此事件。
-	/// 注意：不要在此事件中使用類似 MessageBox.Show 的函式，程式可能會出現怪問題。
-	/// </summary>
-	public event EventHandler ProcessExited 
-	{
-		add
-		{
-			m_ExitedEvent += value;
-		}
-		remove
-		{
-			m_ExitedEvent -= value;
-		}
-	}
 
 	public event DataReceivedEventHandler StdOutputReceived
 	{

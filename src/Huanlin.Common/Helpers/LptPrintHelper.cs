@@ -157,7 +157,7 @@ namespace Huanlin.Common.Helpers
 
             byte[] buf;
 
-            buf = Encoding.Default.GetBytes(s);
+            buf = Encoding.UTF8.GetBytes(s);
             m_FileStream.Write(buf, 0, buf.Length);
         }
 

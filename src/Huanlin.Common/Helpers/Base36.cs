@@ -40,11 +40,11 @@ namespace Huanlin.Common.Helpers
         {
             var reversed = input.TrimStart('0').ToUpper().Reverse();
             long result = 0;
-            int pos = 0;
+            long multiplier = 1;
             foreach (char c in reversed)
             {
-                result += CharList.IndexOf(c) * (long)Math.Pow(36, pos);
-                pos++;
+                result += CharList.IndexOf(c) * multiplier;
+                multiplier *= 36;
             }
             return result;
         }

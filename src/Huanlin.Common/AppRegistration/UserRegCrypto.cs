@@ -51,7 +51,7 @@ namespace Huanlin.AppRegistration
 
 			ByteArray signatureData = new ByteArray(Convert.FromBase64String(signature));
 			rsa.FromXmlString(m_PublicKey);			
-			bool ok = rsa.VerifyData(Encoding.Default.GetBytes(data), SHA1.Create(), signatureData.Bytes);
+			bool ok = rsa.VerifyData(Encoding.UTF8.GetBytes(data), SHA1.Create(), signatureData.Bytes);
 			if (ok)
 			{
 				// 傳回公鑰、簽章、密文（包括密鑰、初始化向量、密文資料）。
@@ -99,7 +99,7 @@ namespace Huanlin.AppRegistration
 
 			rsa.FromXmlString(privateKey);
 
-			byte[] orgData = Encoding.Default.GetBytes(data);
+			byte[] orgData = Encoding.UTF8.GetBytes(data);
 			byte[] signature = rsa.SignData(orgData, SHA1.Create());
 
 			return Convert.ToBase64String(signature);
@@ -140,7 +140,7 @@ namespace Huanlin.AppRegistration
 
 			string regText;
 
-			using (StreamReader sr = new StreamReader(filename, Encoding.Default))
+			using (StreamReader sr = new StreamReader(filename, Encoding.UTF8))
 			{
 				regText = sr.ReadToEnd();
 				sr.Close();
@@ -184,7 +184,7 @@ namespace Huanlin.AppRegistration
 				return null;
 			}
 
-			string decryptedText = Encoding.Default.GetString(decryptedData);
+			string decryptedText = Encoding.UTF8.GetString(decryptedData);
 			UserRegData regData = UserRegData.Parse(decryptedText);
 
 			return regData;

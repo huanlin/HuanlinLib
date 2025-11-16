@@ -114,7 +114,7 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static byte[] StringToBytes(string str)
         {
-            return Encoding.Default.GetBytes(str);
+            return Encoding.UTF8.GetBytes(str);
         }
 
         /// <summary>

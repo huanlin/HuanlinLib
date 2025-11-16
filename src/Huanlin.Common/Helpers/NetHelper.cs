@@ -19,27 +19,22 @@ namespace Huanlin.Common.Helpers
 		/// <returns></returns>
 		public static bool IsServerConnectable(string host, int port, double timeOutSeconds)
 		{
-			TcpClient tcp = new TcpClient();
-			DateTime t = DateTime.Now;
-
-			try
+			using (var tcp = new TcpClient())
 			{
-				IAsyncResult ar = tcp.BeginConnect(host, port, null, null);
-				while (!ar.IsCompleted)
+				try
 				{
-					if (DateTime.Now > t.AddSeconds(timeOutSeconds))
+					IAsyncResult ar = tcp.BeginConnect(host, port, null, null);
+					if (ar.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(timeOutSeconds)))
 					{
-						throw new Exception("Connection timeout!");
+						tcp.EndConnect(ar);
+						return true;
 					}
-					System.Threading.Thread.Sleep(100);
+					return false;
 				}
-				tcp.EndConnect(ar);  // Raise exception for async call (if any).
-				tcp.Close();
-				return true;
-			}
-			catch
-			{
-				return false;
+				catch
+				{
+					return false;
+				}
 			}
 		}
 	}

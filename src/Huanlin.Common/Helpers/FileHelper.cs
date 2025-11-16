@@ -17,7 +17,7 @@ namespace Huanlin.Common.Helpers
 		{
 			string[] files;
 			string[] patterns;
-			List<string> allFiles = new List<string>();
+			HashSet<string> allFiles = new HashSet<string>();
 
 			patterns = searchPattern.Split(";".ToCharArray());
 
@@ -27,15 +27,12 @@ namespace Huanlin.Common.Helpers
 				// 把找到的檔案加入結果清單
 				foreach (string fname in files)
 				{
-					// 為了避免多個搜尋樣式找到重複的檔名，要忽略已經找到的檔名.
-					if (allFiles.IndexOf(fname) < 0)
-					{
-						allFiles.Add(fname);
-					}
+					allFiles.Add(fname);
 				}
 			}
-			allFiles.Sort();
-			return allFiles.ToArray();
+			var sortedFiles = new List<string>(allFiles);
+            sortedFiles.Sort();
+            return sortedFiles.ToArray();
 		}
 
 		/// <summary>

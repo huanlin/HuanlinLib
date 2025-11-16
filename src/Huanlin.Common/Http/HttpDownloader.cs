@@ -1,51 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Handlers;
-using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Huanlin.Common.Http
 {
-    /// <summary>
-    /// A simple HTTP client wrapper for downloading file with progress events.
-    /// Ref: https://github.com/txstudio/HttpClientDownloadWithProgressBar/blob/master/ConsoleApp/Program.cs
-    /// </summary>
-    public class HttpDownloader
+    public static class HttpDownloader
     {
-        private readonly HttpClient _client;
+        // 讓 HttpClient 成為靜態的，以便在應用程式中重複使用。
+        private static readonly HttpClient HttpClient = new HttpClient();
 
-        public HttpDownloader(EventHandler<HttpProgressEventArgs> progressHandler, bool noCache = false)
+        public static async Task DownloadFileAsync(
+            string url,
+            string destinationPath,
+            IProgress<DownloadProgress> progress = null,
+            CancellationToken cancellationToken = default)
         {
-            var handler = new ProgressMessageHandler()
+            using (var response = await HttpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
-                InnerHandler = new HttpClientHandler()
-            };
-            handler.HttpReceiveProgress += progressHandler;
+                response.EnsureSuccessStatusCode();
 
-            _client = new HttpClient(handler);
+                var totalBytes = response.Content.Headers.ContentLength;
 
-            _client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
-            {
-                NoCache = noCache
-            };
+                using (var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken))
+                using (var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
+                {
+                    var totalBytesRead = 0L;
+                    var buffer = new byte[8192];
+                    var isMoreToRead = true;
+
+                    do
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        var bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
+                        if (bytesRead == 0)
+                        {
+                            isMoreToRead = false;
+                        }
+                        else
+                        {
+                            await fileStream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
+
+                            totalBytesRead += bytesRead;
+
+                            progress?.Report(new DownloadProgress
+                            {
+                                TotalBytes = totalBytes,
+                                BytesRead = totalBytesRead
+                            });
+                        }
+                    }
+                    while (isMoreToRead);
+                }
+            }
         }
+    }
 
-        public Task<byte[]> GetByteArrayAsync(string url)
-        {
-            return _client.GetByteArrayAsync(url);
-        }
-
-        public async Task DownloadAsync(Uri uri, string fileName)
-        {
-            var bytes = await _client.GetByteArrayAsync(uri);
-            await File.WriteAllBytesAsync(fileName, bytes);
-        }
-
-        public Task<string> DownloadStringAsync(Uri uri)
-        {
-            return _client.GetStringAsync(uri);
-        }
+    public class DownloadProgress
+    {
+        public long? TotalBytes { get; set; }
+        public long BytesRead { get; set; }
+        public double ProgressPercentage => TotalBytes.HasValue ? (double)BytesRead / TotalBytes.Value * 100.0 : 0;
     }
 }

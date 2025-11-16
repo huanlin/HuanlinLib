@@ -60,11 +60,11 @@ namespace Huanlin.Common.Http
                         {
                             // Look for Content-Type
                             Regex re = new Regex(@"(?<=Content\-Type:)(.*?)(?=\r\n\r\n)");
-                            Match contentTypeMatch = re.Match(content);
+                            Match contentTypeMatch = re.Match(s);
 
                             // Look for filename
                             re = new Regex(@"(?<=filename\=\"")(.*?)(?=\"")");
-                            Match filenameMatch = re.Match(content);
+                            Match filenameMatch = re.Match(s);
 
                             // Did we find the required values?
                             if (contentTypeMatch.Success && filenameMatch.Success)
@@ -151,7 +151,7 @@ namespace Huanlin.Common.Http
             // Copy to a string for header parsing
             string content = encoding.GetString(data);
 
-            System.IO.File.WriteAllText(@"C:\debug.txt", content);
+
 
             // The first line should contain the delimiter
             int delimiterEndIndex = content.IndexOf("\r\n");
@@ -189,7 +189,6 @@ namespace Huanlin.Common.Http
                                 string contentType = contentTypeMatch.Value.Trim();
                                 string fileName = filenameMatch.Value.Trim();
 
-                                System.IO.File.WriteAllText(@"C:\debug2.txt", fileName);
 
                                 if (multiPartHandler != null)
                                 {

@@ -11,8 +11,7 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static bool IsAscii(char ch)
         {
-            int value = Convert.ToInt32(ch);
-            return (value >= 1 && value <= 127);
+            return (ch >= 0x01 && ch <= 0x7F);
         }
 
         /// <summary>
@@ -24,8 +23,7 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static bool IsAsciiDigit(char ch)
         {
-            int value = Convert.ToInt32(ch);
-            return (value >= 48 && value <= 57);
+            return (ch >= '0' && ch <= '9');
         }
 
         /// <summary>
@@ -37,10 +35,9 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static bool IsAsciiLetter(char ch)
         {
-            int value = Convert.ToInt32(ch);
-            if (value >= 0x41 && value <= 0x5a)
+            if (ch >= 'A' && ch <= 'Z')
                 return true;
-            if (value >= 0x61 && value <= 0x7a)
+            if (ch >= 'a' && ch <= 'z')
                 return true;
             return false;
         }
@@ -62,17 +59,11 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static bool IsFullShapeLetter(char ch)
         {
-            int bigA = Convert.ToInt32('Ａ');
-            int smallA = Convert.ToInt32('ａ');
-            int value = Convert.ToInt32(ch);
-
-            value -= bigA;
-            if (value >= 0 && value < 26)
+            if (ch >= 'Ａ' && ch <= 'Ｚ')
             {
                 return true;
             }
-            value = Convert.ToInt32(ch) - smallA;
-            if (value >= 0 && value < 26)
+            if (ch >= 'ａ' && ch <= 'ｚ')
             {
                 return true;
             }
@@ -86,8 +77,7 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static bool IsFullShapeDigit(char ch)
         {
-            int value = Convert.ToInt32(ch);
-            if (value >= Convert.ToInt32('０') && value <= Convert.ToInt32('９'))
+            if (ch >= '０' && ch <= '９')
                 return true;
             return false;
         }
@@ -99,19 +89,13 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static char FullShapeToAsciiLetter(char ch)
         {
-            int bigA = Convert.ToInt32('Ａ');
-            int smallA = Convert.ToInt32('ａ');
-            int value = Convert.ToInt32(ch);
-            
-            value -= bigA;
-            if (value >= 0 && value < 26)
+            if (ch >= 'Ａ' && ch <= 'Ｚ')
             {
-                return Convert.ToChar(value + 0x41);
+                return (char)(ch - 'Ａ' + 'A');
             }
-            value = Convert.ToInt32(ch) - smallA;
-            if (value >= 0 && value < 26)
+            if (ch >= 'ａ' && ch <= 'ｚ')
             {
-                return Convert.ToChar(value + 0x61);
+                return (char)(ch - 'ａ' + 'a');
             }
             throw new ArgumentException("無法轉換成半形英文字母: " + ch.ToString());
         }
@@ -124,13 +108,9 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static char FullShapeToAsciiDigit(char ch)
         {
-            int zero = Convert.ToInt32('０');
-            int nine = Convert.ToInt32('９');
-            int value = Convert.ToInt32(ch);
-            value -= zero;
-            if (value < 0 || value > 9)
-                throw new ArgumentException("無法轉換成半形數字: " + ch.ToString());
-            return Convert.ToChar(value + 48);
+            if (ch >= '０' && ch <= '９')
+                return (char)(ch - '０' + '0');
+            throw new ArgumentException("無法轉換成半形數字: " + ch.ToString());
         }
     }
 }

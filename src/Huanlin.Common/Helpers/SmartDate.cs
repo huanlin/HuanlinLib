@@ -11,6 +11,7 @@ namespace Huanlin.Common.Helpers
     /// data type and the design choices behind it.
     /// </remarks>
     [Serializable()]
+    [System.Obsolete("SmartDate 類別已過時，請改用 Nullable<DateTime> (即 DateTime?)。", false)]
     sealed public class SmartDate : IComparable
     {
         DateTime _date;

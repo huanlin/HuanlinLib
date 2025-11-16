@@ -1,33 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
+using System.Text.Json;
 
 namespace Huanlin.Common.Helpers
 {
-    public class JsonHelper
+    public static class JsonHelper
     {
         public static string Serialize<T>(T obj)
         {
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
-            MemoryStream ms = new MemoryStream();
-            serializer.WriteObject(ms, obj);
-            string retVal = Encoding.UTF8.GetString(ms.ToArray());
-            ms.Dispose();
-            return retVal;
+            return JsonSerializer.Serialize(obj);
         }
 
         public static T Deserialize<T>(string jsonStr)
         {
-            T obj = Activator.CreateInstance<T>();  // 注意: 欲反序列化的類別必須有預設建構元.
-            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonStr)))
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
-                obj = (T)serializer.ReadObject(ms);
-                return obj;
-            }            
+            return JsonSerializer.Deserialize<T>(jsonStr);
         }
     }
 }

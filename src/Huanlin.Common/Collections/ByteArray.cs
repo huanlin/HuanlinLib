@@ -20,7 +20,7 @@ namespace Huanlin.Collections
         /// <summary> 
         /// Determines the default text encoding across ALL Data instances 
         /// </summary> 
-        public static Encoding DefaultEncoding = Encoding.Default;
+        public static Encoding DefaultEncoding = Encoding.UTF8;
 
         /// <summary> 
         /// Determines the default text encoding for this Data instance 

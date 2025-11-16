@@ -318,7 +318,7 @@ namespace Huanlin.Common.Helpers
         /// <returns></returns>
         public static byte[] ToByteArray(string str)
         {
-            return Encoding.Default.GetBytes(str);
+            return Encoding.UTF8.GetBytes(str);
         }
 
         /// <summary>
@@ -415,6 +415,8 @@ namespace Huanlin.Common.Helpers
 
         /// <summary>
         /// 將字串以 MD5 編碼。
+        /// **警告：MD5 演算法已被認為不安全，不應再用於密碼儲存或任何需要高安全性的場景。**
+        /// **請考慮使用 SHA256 或更強的密碼雜湊演算法 (如 Argon2 或 PBKDF2)。**
         /// </summary>
         /// <param name="input">欲編碼的字串。</param>
         /// <returns>編碼過的字串</returns>
@@ -427,7 +429,7 @@ namespace Huanlin.Common.Helpers
             // Convert the input string to a byte 
             // array and compute the hash.
             byte[] data = md5Hasher.ComputeHash(
-               Encoding.Default.GetBytes(input));
+               Encoding.UTF8.GetBytes(input));
 
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
@@ -463,6 +465,8 @@ namespace Huanlin.Common.Helpers
 
         /// <summary>
         /// 驗證一個字串是否經過 MD5 編碼後會與傳入的 MD5 字串相符。可用來驗證使用者密碼。
+        /// **警告：MD5 演算法已被認為不安全，不應再用於密碼儲存或任何需要高安全性的場景。**
+        /// **請考慮使用 SHA256 或更強的密碼雜湊演算法 (如 Argon2 或 PBKDF2)。**
         /// </summary>
         /// <param name="input">欲比較的字串。</param>
         /// <param name="hash">MD5 編碼過的字串。</param>
